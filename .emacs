@@ -7,6 +7,7 @@
    ["black" "#d55e00" "#009e73" "#f8ec59" "#0072b2" "#cc79a7" "#56b4e9" "white"])
  '(custom-enabled-themes (quote (manoj-dark)))
  '(inhibit-startup-screen t)
+ '(send-mail-function (quote smtpmail-send-it))
  '(show-paren-mode t))
 
 (custom-set-faces
@@ -32,6 +33,8 @@
 (setq ido-enable-flex-matching t)
 (setq ido-everywhere t)
 (ido-mode t)
+(setq column-number-mode t)
+
 
 ;;pdflatex
 (setq latex-run-command "xelatex")

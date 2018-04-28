@@ -1,5 +1,5 @@
 (setq user-mail-address "geoff.rosenberg@gmail.com"
-      user-full-name "C. Geoffrey Rosenberg")
+      user-full-name "Geoff Rosenberg")
 
 (setq gnus-select-method
       '(nnimap "gmail"
@@ -27,11 +27,15 @@
 (add-hook 'message-setup-hook 'mml-secure-message-encrypt)
 
 (setq gnus-thread-sort-functions
-      '((not gnus-thread-sort-by-number)
-	(not gnus-thread-sort-by-date)))
+      '((not gnus-thread-sort-by-date)
+      gnus-thread-sort-by-number))
 
+;; n: Sender name from header; B: Thread level; U: unread; D: date; s: subject; F: full From header; R: Secondary mark
 (setq gnus-summary-line-format
-      "%B %U %D %s %F %R\n")
+      "%U %n %B %D %s\n")
+
+;;(setq gnus-fetch-old-headers t) ;fill threads by fetching old header information
+;;(setq gnus-show-threads nil) ; get rid of thread display
 
 ;; Add two key bindings for your Gmail experience.
 (add-hook 'gnus-summary-mode-hook 'my-gnus-summary-keys)
