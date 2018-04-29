@@ -34,11 +34,13 @@
 (setq gnus-summary-line-format
       "%U %n %B %D %s\n")
 
-;;(setq gnus-fetch-old-headers t) ;fill threads by fetching old header information
-;;(setq gnus-show-threads nil) ; get rid of thread display
-
 ;; Add two key bindings for your Gmail experience.
 (add-hook 'gnus-summary-mode-hook 'my-gnus-summary-keys)
+
+;; prevent the rendering of HTML emails
+(with-eval-after-load "mm-decode"
+       (add-to-list 'mm-discouraged-alternatives "text/html")
+       (add-to-list 'mm-discouraged-alternatives "text/richtext"))
 
 (defun my-gnus-summary-keys ()
   (local-set-key "y" 'gmail-archive)
