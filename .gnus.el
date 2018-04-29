@@ -24,7 +24,7 @@
 
 ;; Attempt to encrypt all the mails we'll be sending.
 ;; can just delete the setting when typing the message if desired
-(add-hook 'message-setup-hook 'mml-secure-message-encrypt)
+;;(add-hook 'message-setup-hook 'mml-secure-message-encrypt)
 
 (setq gnus-thread-sort-functions
       '((not gnus-thread-sort-by-date)
@@ -41,6 +41,18 @@
 (with-eval-after-load "mm-decode"
        (add-to-list 'mm-discouraged-alternatives "text/html")
        (add-to-list 'mm-discouraged-alternatives "text/richtext"))
+
+;;get gnus demon to scan for new email when emacs is idle.
+(setq gnus-demon-timestep 10) ;; gnus demon timestep in seconds
+(gnus-demon-add-handler 'gnus-demon-scan-mail 3 t) ;; scan mail every 3 timesteps, only when emacs is idle
+
+;;gnus-desktop-notify generates notifications whenever the group buffer is updated.
+(require 'gnus-desktop-notify)
+(gnus-desktop-notify-mode)
+(gnus-demon-add-scanmail)
+
+;; gnus-notify adds modeline information when there is new mail
+(require 'gnus-notify)
 
 (defun my-gnus-summary-keys ()
   (local-set-key "y" 'gmail-archive)
