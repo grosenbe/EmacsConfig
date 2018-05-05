@@ -35,6 +35,7 @@
 (ido-mode t)
 (setq column-number-mode t)
 
+(display-time-mode 1) ;;should show the time in the modeline
 
 ;;pdflatex
 (setq latex-run-command "xelatex")
