@@ -9,6 +9,7 @@ contain all system-specific settings (hard coded paths, etc).
 
 ## Minimal .emacs
 A minimal Emacs configuration might look like the following:
+
 (add-to-list 'load-path "~/EmacsConfig")
 (require 'EmacsConfig)
 
