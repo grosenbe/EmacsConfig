@@ -38,7 +38,8 @@
 (display-time-mode 1) ;; show the time in the modeline
 
 ;;pdflatex
-(setq latex-run-command "xelatex")
+(setq latex-run-command "latexmk")
+(setq tex-start-commands "")
 
 (global-set-key (kbd "C-c w") 'toggle-truncate-lines)
 
@@ -48,8 +49,8 @@
 ;; melpa packages
 (require 'package)
 (add-to-list 'package-archives
-             '("melpa-stable" . "https://stable.melpa.org/packages/"))
-(package-initialize)
+             '("melpa" . "https://melpa.org/packages/"))
+;; (package-initialize)
 
 ;; org stuff
 (global-set-key (kbd "C-c a") 'org-agenda)
@@ -59,5 +60,7 @@
  'org-babel-load-languages
  '((C . t)
    (fortran . t)))
+
+(setq dired-listing-switches "-aBhl --group-directories-first")
 
 (provide 'EmacsConfig)
