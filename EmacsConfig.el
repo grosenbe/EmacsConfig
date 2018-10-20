@@ -41,9 +41,10 @@
 (setq latex-run-command "latexmk")
 (setq tex-start-commands "")
 ;; text wrapping
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
+;; (add-hook 'text-mode-hook 'turn-on-auto-fill)
 (add-hook 'text-mode-hook
   '(lambda() (set-fill-column 80)))
+(setq sentence-end-double-space nil)
 
 
 (global-set-key (kbd "C-c w") 'toggle-truncate-lines)
