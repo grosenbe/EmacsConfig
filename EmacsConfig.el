@@ -1,22 +1,3 @@
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector ["black" "#d55e00" "#009e73" "#f8ec59" "#0072b2" "#cc79a7" "#56b4e9" "white"])
- '(custom-enabled-themes (quote (manoj-dark)))
- '(inhibit-startup-screen t)
- '(org-agenda-files (quote ("~/BO_Home/Admin/org/Org_Notes.org")))
- '(send-mail-function (quote smtpmail-send-it))
- '(show-paren-mode t))
-
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-
 ;;tell emacs where the personal load path directory is
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 
@@ -56,9 +37,9 @@
 (require 'package)
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/"))
-;; (package-initialize)
 
-;; org stuff
+;; org stuff (make sure org is enabled and org-agenda-files is set to
+;; the correct path)
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
 ;; set org mode up for literal programming
