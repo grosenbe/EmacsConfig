@@ -23,7 +23,7 @@
 (setq tex-start-commands "")
 ;; text wrapping
 ;; (add-hook 'text-mode-hook 'turn-on-auto-fill)
-(add-hook 'text-mode-hook
+(add-hook 'latex-mode-hook
   '(lambda() (set-fill-column 80)))
 (setq sentence-end-double-space nil)
 
@@ -45,8 +45,10 @@
 ;; set org mode up for literal programming
 (org-babel-do-load-languages
  'org-babel-load-languages
- '((C . t)
-   (fortran . t)))
+ '((C . t)))
+
+;; Magit stuff
+(global-set-key (kbd "C-x g") 'magit-status)
 
 (setq dired-listing-switches "-aBhl --group-directories-first")
 
