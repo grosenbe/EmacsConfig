@@ -2,6 +2,9 @@
       user-full-name "Geoff Rosenberg")
 
 (setq gnus-select-method
+      '(nntp "free.xsusenet.com"))
+
+(add-to-list 'gnus-secondary-select-methods
       '(nnimap "gmail"
 	       (nnimap-address "imap.gmail.com")
 	       (nnimap-server-port 993)
@@ -24,23 +27,19 @@
 
 ;; Attempt to encrypt all the mails we'll be sending.
 ;; can just delete the setting when typing the message if desired
-;;(add-hook 'message-setup-hook 'mml-secure-message-encrypt)
+(add-hook 'message-setup-hook 'mml-secure-message-encrypt)
 
 (setq gnus-thread-sort-functions
       '((not gnus-thread-sort-by-date)
       gnus-thread-sort-by-number))
 
-;; n: Sender name from header; B: Thread level; U: unread; D: date; s: subject; F: full From header; R: Secondary mark
-(setq gnus-summary-line-format
-      "%U %n %B %D %s\n")
-
 ;; Add two key bindings for your Gmail experience.
 (add-hook 'gnus-summary-mode-hook 'my-gnus-summary-keys)
 
-;; prevent the rendering of HTML emails
-(with-eval-after-load "mm-decode"
-       (add-to-list 'mm-discouraged-alternatives "text/html")
-       (add-to-list 'mm-discouraged-alternatives "text/richtext"))
+;; ;; prevent the rendering of HTML emails
+;; (with-eval-after-load "mm-decode"
+;;        (add-to-list 'mm-discouraged-alternatives "text/html")
+;;        (add-to-list 'mm-discouraged-alternatives "text/richtext"))
 
 ;;get gnus demon to scan for new email when emacs is idle.
 (setq gnus-demon-timestep 10) ;; gnus demon timestep in seconds
@@ -51,8 +50,9 @@
 (gnus-desktop-notify-mode)
 (gnus-demon-add-scanmail)
 
-;; gnus-notify adds modeline information when there is new mail
-(require 'gnus-notify)
+;; n: Sender name from header; B: Thread level; U: unread; D: date; s: subject; F: full From header; R: Secondary mark
+(setq gnus-summary-line-format
+      "%U %n %B %D %s:\n")
 
 (defun my-gnus-summary-keys ()
   (local-set-key "y" 'gmail-archive)
