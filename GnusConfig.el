@@ -51,8 +51,19 @@
 (gnus-demon-add-scanmail)
 
 ;; n: Sender name from header; B: Thread level; U: unread; D: date; s: subject; F: full From header; R: Secondary mark
-(setq gnus-summary-line-format
-      "%U %n %B %D %s:\n")
+(setq gnus-summary-line-format "%U%R %n %B %&user-date; %s:\n"
+      gnus-sum-thread-tree-false-root ""
+      gnus-sum-thread-tree-indent " "
+      gnus-sum-thread-tree-leaf-with-other "├► "
+      gnus-sum-thread-tree-root ""
+      gnus-sum-thread-tree-single-leaf "╰► "
+      gnus-sum-thread-tree-vertical "│")
+
+(setq gnus-user-date-format-alist
+      '(((gnus-seconds-today) . "Today, %H:%M")
+        ((+ 86400 (gnus-seconds-today)) . "Yesterday, %H:%M")
+        (604800 . "%A %H:%M") ;;that's one week
+        (t . "%Y-%m-%d %H:%M"))) ;;this one is used when no other does match
 
 (defun my-gnus-summary-keys ()
   (local-set-key "y" 'gmail-archive)
