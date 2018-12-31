@@ -65,6 +65,13 @@
         (604800 . "%A %H:%M") ;;that's one week
         (t . "%Y-%m-%d %H:%M"))) ;;this one is used when no other does match
 
+;; flyspell for new messages
+(add-hook 'message-mode-hook
+	  (lambda ()
+	    (flyspell-mode 1)
+	    )
+	  )
+
 (defun my-gnus-summary-keys ()
   (local-set-key "y" 'gmail-archive)
   (local-set-key "$" 'gmail-report-spam))
