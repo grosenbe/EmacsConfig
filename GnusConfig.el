@@ -2,9 +2,6 @@
       user-full-name "Geoff Rosenberg")
 
 (setq gnus-select-method
-      '(nntp "free.xsusenet.com"))
-
-(add-to-list 'gnus-secondary-select-methods
       '(nnimap "gmail"
 	       (nnimap-address "imap.gmail.com")
 	       (nnimap-server-port 993)
