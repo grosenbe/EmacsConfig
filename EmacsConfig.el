@@ -52,4 +52,5 @@
 
 (setq dired-listing-switches "-aBhl --group-directories-first")
 
+;; test comment
 (provide 'EmacsConfig)
