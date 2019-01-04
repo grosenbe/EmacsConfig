@@ -48,7 +48,9 @@
 (gnus-demon-add-scanmail)
 
 ;; n: Sender name from header; B: Thread level; U: unread; D: date; s: subject; F: full From header; R: Secondary mark
-(setq gnus-summary-line-format "%U%R %n %B %&user-date; %s:\n"
+(setq gnus-extra-headers
+      '(To Newsgroups))
+(setq gnus-summary-line-format "%U%R %f %B %&user-date; %s\n"
       gnus-sum-thread-tree-false-root ""
       gnus-sum-thread-tree-indent " "
       gnus-sum-thread-tree-leaf-with-other "├► "
