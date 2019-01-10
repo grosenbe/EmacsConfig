@@ -5,7 +5,9 @@
       '(nnimap "gmail"
 	       (nnimap-address "imap.gmail.com")
 	       (nnimap-server-port 993)
-	       (nnimap-stream ssl)))
+	       (nnimap-stream ssl)
+	       (nnmail-expiry-target "nnimap+gmail:[Gmail]/Trash")  ; Move expired messages to Gmail's trash.
+	       (nnmail-expiry-wait immediate)))			    ; mails marked as expired can be processed immediately
 
 ;; Gmail system labels have the prefix [Gmail], which matches
 ;; the default value of gnus-ignored-newsgroups. That's why we
