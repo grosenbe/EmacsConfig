@@ -19,6 +19,11 @@
 ;; We don't want local, unencrypted copies of emails we write.
 (setq gnus-message-archive-group nil)
 
+;; CGR To Try
+;; ; Archive outgoing email in Sent folder on imap.gmail.com:
+;; (setq gnus-message-archive-method '(nnimap "imap.gmail.com")
+;;       gnus-message-archive-group "[Gmail]/Sent Mail")
+
 ;; We want to be able to read the emails we wrote.
 (setq mml2015-encrypt-to-self t)
 
