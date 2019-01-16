@@ -50,7 +50,6 @@
 ;;gnus-desktop-notify generates notifications whenever the group buffer is updated.
 (require 'gnus-desktop-notify)
 (gnus-desktop-notify-mode)
-(gnus-demon-add-scanmail)
 
 ;; n: Sender name from header; B: Thread level; U: unread; D: date; s: subject; F: full From header; R: Secondary mark
 (setq gnus-extra-headers
