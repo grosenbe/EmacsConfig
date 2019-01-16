@@ -21,6 +21,11 @@
 ;; We don't want local, unencrypted copies of emails we write.
 (setq gnus-message-archive-group nil)
 
+;; CGR To Try
+;; ; Archive outgoing email in Sent folder on imap.gmail.com:
+;; (setq gnus-message-archive-method '(nnimap "imap.gmail.com")
+;;       gnus-message-archive-group "[Gmail]/Sent Mail")
+
 ;; We want to be able to read the emails we wrote.
 (setq mml2015-encrypt-to-self t)
 
@@ -47,7 +52,6 @@
 ;;gnus-desktop-notify generates notifications whenever the group buffer is updated.
 (require 'gnus-desktop-notify)
 (gnus-desktop-notify-mode)
-(gnus-demon-add-scanmail)
 
 ;; n: Sender name from header; B: Thread level; U: unread; D: date; s: subject; F: full From header; R: Secondary mark
 (setq gnus-extra-headers

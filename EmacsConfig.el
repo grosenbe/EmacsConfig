@@ -50,7 +50,7 @@
 ;; Magit stuff
 (global-set-key (kbd "C-x g") 'magit-status)
 
-(setq dired-listing-switches "-aBhl --group-directories-first")
+(setq dired-listing-switches "-ahl --group-directories-first")
 
 ;; test comment
 (provide 'EmacsConfig)
