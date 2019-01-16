@@ -73,6 +73,38 @@
 	    )
 	  )
 
+ ;; Signature
+(setq gnus-posting-styles '((".*" (signature "\nBest regards,\nGeoff Rosenberg"))))
+
+;; pgp signing
+(require 'epg-config)
+(setq
+ epg-debug t ;;  *epg-debug*" buffer
+ mml2015-use 'epg
+ mml2015-verbose t
+ mml2015-encrypt-to-self t
+ mml2015-always-trust nil
+ mml2015-cache-passphrase t
+ mml2015-passphrase-cache-expiry '36000
+ mml2015-sign-with-sender t
+ gnus-message-replyencrypt t
+ gnus-message-replysign t
+ gnus-message-replysignencrypted t
+ gnus-treat-x-pgp-sig t
+ mm-verify-option 'always
+ mm-decrypt-option 'always
+ mm-sign-option nil ;; mm-sign-option 'guided
+ gnus-buttonized-mime-types
+ '("multipart/alternative" "multipart/encrypted" "multipart/signed"))
+
+(defadvice mml2015-sign (after mml2015-sign-rename (cont) act)
+  (save-excursion
+    (search-backward "Content-Type: application/pgp-signature")
+    (goto-char (point-at-eol))
+    (insert "; name=\"signature.asc\"; description=\"Digital signature\"")))
+
+(add-hook 'message-send-hook (lambda () (mml-secure-message-sign-pgpmime)))
+
 (defun my-gnus-summary-keys ()
   (local-set-key "y" 'gmail-archive)
   (local-set-key "$" 'gmail-report-spam))
