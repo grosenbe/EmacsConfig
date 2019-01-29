@@ -6,8 +6,6 @@
 (setq recentf-max-menu-items 25)
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
-(delete-selection-mode 1)
-
 ;; convenience stuff
 (global-set-key (kbd "<C-tab>") 'other-window)
 (require 'ido)
@@ -15,8 +13,10 @@
 (setq ido-everywhere t)
 (ido-mode t)
 (setq column-number-mode t)
-
+(delete-selection-mode 1)		;"insert" key
+(show-paren-mode 1) 			;highlight matching parenthesis
 (display-time-mode 1) ;; show the time in the modeline
+(global-set-key (kbd "C-c w") 'toggle-truncate-lines)
 
 ;;pdflatex
 (setq latex-run-command "latexmk")
@@ -26,9 +26,6 @@
 (add-hook 'latex-mode-hook
   '(lambda() (set-fill-column 80)))
 (setq sentence-end-double-space nil)
-
-
-(global-set-key (kbd "C-c w") 'toggle-truncate-lines)
 
 ;; always default to many windows in GDB
 (setq gdb-many-windows t)
@@ -52,5 +49,4 @@
 
 (setq dired-listing-switches "-ahl --group-directories-first")
 
-;; test comment
 (provide 'EmacsConfig)
