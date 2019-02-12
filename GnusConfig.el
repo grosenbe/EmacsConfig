@@ -56,7 +56,7 @@
 ;; n: Sender name from header; B: Thread level; U: unread; D: date; s: subject; F: full From header; R: Secondary mark
 (setq gnus-extra-headers
       '(To Newsgroups))
-(setq gnus-summary-line-format "%U%R %-25f %B %&user-date; %s\n"
+(setq gnus-summary-line-format "%U%R %-35f %B %&user-date; %s\n"
       gnus-sum-thread-tree-false-root ""
       gnus-sum-thread-tree-indent " "
       gnus-sum-thread-tree-leaf-with-other "├► "
