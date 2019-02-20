@@ -47,7 +47,7 @@
 
 ;;get gnus demon to scan for new email when emacs is idle.
 (setq gnus-demon-timestep 10) ;; gnus demon timestep in seconds
-(gnus-demon-add-handler 'gnus-demon-scan-mail 3 t) ;; scan mail every 3 timesteps, only when emacs is idle
+(gnus-demon-add-handler 'gnus-demon-scan-news 3 t) ;; scan news/mail every 3 timesteps, only when emacs is idle
 
 ;;gnus-desktop-notify generates notifications whenever the group buffer is updated.
 (require 'gnus-desktop-notify)
