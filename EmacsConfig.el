@@ -5,6 +5,7 @@
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
+(setq recentf-exclude '(org-agenda-files))
 
 ;; convenience stuff
 (global-set-key (kbd "<C-tab>") 'other-window)
@@ -15,20 +16,16 @@
 (setq column-number-mode t)
 (delete-selection-mode 1)		;"insert" key
 (show-paren-mode 1) 			;highlight matching parenthesis
-(display-time-mode 1) ;; show the time in the modeline
+(display-time-mode 1)                   ;show the time in the modeline
 (global-set-key (kbd "C-c w") 'toggle-truncate-lines)
 
 ;;pdflatex
 (setq latex-run-command "latexmk")
 (setq tex-start-commands "")
 ;; text wrapping
-;; (add-hook 'text-mode-hook 'turn-on-auto-fill)
 (add-hook 'latex-mode-hook
   '(lambda() (set-fill-column 80)))
 (setq sentence-end-double-space nil)
-
-;; always default to many windows in GDB
-(setq gdb-many-windows t)
 
 ;; melpa packages
 (require 'package)
