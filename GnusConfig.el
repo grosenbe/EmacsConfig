@@ -47,7 +47,7 @@
 
 ;;get gnus demon to scan for new email when emacs is idle.
 (setq gnus-demon-timestep 10) ;; gnus demon timestep in seconds
-(gnus-demon-add-handler 'gnus-demon-scan-mail 3 t) ;; scan mail every 3 timesteps, only when emacs is idle
+(gnus-demon-add-handler 'gnus-demon-scan-news 3 t) ;; scan news/mail every 3 timesteps, only when emacs is idle
 
 ;;gnus-desktop-notify generates notifications whenever the group buffer is updated.
 (require 'gnus-desktop-notify)
@@ -56,7 +56,7 @@
 ;; n: Sender name from header; B: Thread level; U: unread; D: date; s: subject; F: full From header; R: Secondary mark
 (setq gnus-extra-headers
       '(To Newsgroups))
-(setq gnus-summary-line-format "%U%R %f %B %&user-date; %s\n"
+(setq gnus-summary-line-format "%U%R %-35f %B %&user-date; %s\n"
       gnus-sum-thread-tree-false-root ""
       gnus-sum-thread-tree-indent " "
       gnus-sum-thread-tree-leaf-with-other "├► "
