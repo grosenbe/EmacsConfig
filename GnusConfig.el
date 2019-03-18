@@ -17,6 +17,7 @@
       gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")
 
 (setq gnus-agent nil)
+(setq gnus-use-dribble-file nil)	;no dribble file
 
 ;; We don't want local, unencrypted copies of emails we write.
 (setq gnus-message-archive-group nil)
@@ -37,14 +38,6 @@
       '((not gnus-thread-sort-by-date)
       gnus-thread-sort-by-number))
 
-;; Add two key bindings for your Gmail experience.
-(add-hook 'gnus-summary-mode-hook 'my-gnus-summary-keys)
-
-;; ;; prevent the rendering of HTML emails
-;; (with-eval-after-load "mm-decode"
-;;        (add-to-list 'mm-discouraged-alternatives "text/html")
-;;        (add-to-list 'mm-discouraged-alternatives "text/richtext"))
-
 ;;get gnus demon to scan for new email when emacs is idle.
 (setq gnus-demon-timestep 10) ;; gnus demon timestep in seconds
 (gnus-demon-add-handler 'gnus-demon-scan-news 3 t) ;; scan news/mail every 3 timesteps, only when emacs is idle
@@ -63,7 +56,6 @@
       gnus-sum-thread-tree-root ""
       gnus-sum-thread-tree-single-leaf "╰► "
       gnus-sum-thread-tree-vertical "│")
-
 (setq gnus-user-date-format-alist
       '(((gnus-seconds-today) . "Today, %H:%M")
         ((+ 86400 (gnus-seconds-today)) . "Yesterday, %H:%M")
@@ -76,6 +68,22 @@
 	    (flyspell-mode 1)
 	    )
 	  )
+
+;; BBDB: Address list
+(require 'bbdb)
+(bbdb-initialize 'message 'gnus 'sendmail)
+(add-hook 'gnus-startup-hook 'bbdb-insinuate-gnus)
+(bbdb-mua-auto-update-init 'message)
+(setq bbdb-mua-auto-update-p 'query)
+(setq bbdb/mail-auto-create-p t
+      bbdb/news-auto-create-p t)
+(setq bbdb-mua-auto-complete t)
+
+;; auto-complete emacs address using bbdb UI
+(add-hook 'message-mode-hook
+          '(lambda ()
+             (flyspell-mode t)
+             (local-set-key (kbd "TAB") 'bbdb-complete-mail)))
 
  ;; Signature
 (setq gnus-posting-styles '((".*" (signature "\nBest regards,\nGeoff Rosenberg"))))
@@ -108,10 +116,6 @@
     (insert "; name=\"signature.asc\"; description=\"Digital signature\"")))
 
 (add-hook 'message-send-hook (lambda () (mml-secure-message-sign-pgpmime)))
-
-(defun my-gnus-summary-keys ()
-  (local-set-key "y" 'gmail-archive)
-  (local-set-key "$" 'gmail-report-spam))
 
 (defun gmail-archive ()
   "Archive the current or marked mails.
