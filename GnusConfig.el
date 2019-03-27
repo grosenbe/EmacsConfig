@@ -42,6 +42,7 @@
 (setq gnus-demon-timestep 10) ;; gnus demon timestep in seconds
 (gnus-demon-add-handler 'gnus-demon-scan-news 3 t) ;; scan news/mail every 3 timesteps, only when emacs is idle
 
+(require 'gnus-notify)			;modeline notifications
 ;;gnus-desktop-notify generates notifications whenever the group buffer is updated.
 (require 'gnus-desktop-notify)
 (gnus-desktop-notify-mode)
