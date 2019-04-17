@@ -82,9 +82,10 @@
           '(lambda ()
              (flyspell-mode t)
              (local-set-key (kbd "TAB") 'bbdb-complete-mail)))
+(setq bbdb-complete-mail-allow-cycling t)
 
  ;; Signature
-(setq gnus-posting-styles '((".*" (signature "\nBest regards,\nGeoff Rosenberg"))))
+(setq gnus-posting-styles '((".*" (signature "Best regards,\nGeoff Rosenberg"))))
 
 ;; pgp signing
 (require 'epg-config)

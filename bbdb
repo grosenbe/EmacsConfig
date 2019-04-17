@@ -1,5 +1,6 @@
 ;; -*- mode: Emacs-Lisp; coding: utf-8; -*-
 ;;; file-format: 9
+["Chris" "Gregory" nil ("Chris Gregory") nil nil nil ("chris.gregory@solarreserve.com") nil "77832994-77b2-418e-9732-660f5b9cbb37" "2019-04-17 03:23:01 +0000" "2019-04-17 03:40:01 +0000" nil]
 ["Wey" "Wang" nil ("Wey Wang") nil nil nil ("wey.wang@gmail.com") nil "f7468d35-b87d-4abd-ba7b-76fe95b58f51" "2019-04-17 03:23:01 +0000" "2019-04-17 03:23:01 +0000" nil]
 ["Vishnu" "Vyas" nil ("Vishnu Vyas") nil nil nil ("vishnuvyas@hotmail.com" "vishnuvyasmuni@gmail.com") nil "5c2a80d7-162f-4c0a-9631-7c26954202f9" "2019-04-17 03:23:01 +0000" "2019-04-17 03:23:01 +0000" nil]
 ["Vera" "Rosenberg" nil ("Vera Rosenberg") nil nil nil ("vera214usc@gmail.com") nil "65300eea-d865-4cda-adf1-08c15925770e" "2019-04-17 03:23:01 +0000" "2019-04-17 03:23:01 +0000" nil]
@@ -43,7 +44,6 @@
 ["Christine" "Lao" nil ("Christine Lao") nil nil nil ("chrissyatucsd@gmail.com" "chrissyatucsd@yahoo.com" "christine.jade.lao@gmail.com") nil "758e03a9-d646-41ed-b8a6-63729f5dfc6e" "2019-04-17 03:23:01 +0000" "2019-04-17 03:23:01 +0000" nil]
 ["Christine" "Egger" nil ("Christine Egger") nil nil nil ("Christine.Egger@solarreserve.com") nil "6275ea92-e838-4f13-a331-0beac2daf551" "2019-04-17 03:23:01 +0000" "2019-04-17 03:23:01 +0000" nil]
 ["Chris" "Rosenberg" nil ("Chris Rosenberg") nil nil nil ("chris@hotkoala.com" "chris_rosenberg2000@yahoo.com" "chris@cwrcreative.com" "chris@tesmollc.com" "christopherrosenberg@gmail.com") nil "68fea66c-7e65-466c-973a-5ca170caf5cc" "2019-04-17 03:23:01 +0000" "2019-04-17 03:23:01 +0000" nil]
-["Chris" "" nil ("Chris") nil nil nil ("chris.gregory@solarreserve.com") nil "77832994-77b2-418e-9732-660f5b9cbb37" "2019-04-17 03:23:01 +0000" "2019-04-17 03:23:01 +0000" nil]
 [nil nil nil (nil) nil nil nil ("dcdplubell@gmail.com") nil "1a390236-5d5d-453a-a262-6378e10d0178" "2019-04-17 03:23:01 +0000" "2019-04-17 03:23:01 +0000" nil]
 ["Brad" "Hines" nil ("Brad Hines") nil nil nil ("brad.hines@solarreserve.com") nil "83ac1df8-8e87-4331-b5d0-6547b30ee907" "2019-04-17 03:23:01 +0000" "2019-04-17 03:23:01 +0000" nil]
 ["Betty" "Chuong" nil ("Betty Chuong") nil nil nil ("Betty.Chuong@esterline.com" "bettychuong@gmail.com") nil "cf553633-f19a-4373-84ce-905c58e65fe2" "2019-04-17 03:23:01 +0000" "2019-04-17 03:23:01 +0000" nil]
