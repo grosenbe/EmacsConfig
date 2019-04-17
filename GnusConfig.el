@@ -27,9 +27,6 @@
 ;; (setq gnus-message-archive-method '(nnimap "imap.gmail.com")
 ;;       gnus-message-archive-group "[Gmail]/Sent Mail")
 
-;; We want to be able to read the emails we wrote.
-(setq mml2015-encrypt-to-self t)
-
 ;; Attempt to encrypt all the mails we'll be sending.
 ;; can just delete the setting when typing the message if desired
 (add-hook 'message-setup-hook 'mml-secure-message-encrypt)
@@ -39,8 +36,8 @@
       gnus-thread-sort-by-number))
 
 ;;get gnus demon to scan for new email when emacs is idle.
-(setq gnus-demon-timestep 10) ;; gnus demon timestep in seconds
-(gnus-demon-add-handler 'gnus-demon-scan-news 3 t) ;; scan news/mail every 3 timesteps, only when emacs is idle
+(setq gnus-demon-timestep 60) ;; gnus demon timestep in seconds
+(gnus-demon-add-handler 'gnus-demon-scan-news 2 t) ;; scan news/mail every 3 timesteps, only when emacs is idle
 
 (require 'gnus-notify)			;modeline notifications
 ;;gnus-desktop-notify generates notifications whenever the group buffer is updated.
@@ -50,7 +47,7 @@
 ;; n: Sender name from header; B: Thread level; U: unread; D: date; s: subject; F: full From header; R: Secondary mark
 (setq gnus-extra-headers
       '(To Newsgroups))
-(setq gnus-summary-line-format "%U%R %-35f %B %&user-date; %s\n"
+(setq gnus-summary-line-format "%U%R %*%-30f %B %&user-date; %s\n"
       gnus-sum-thread-tree-false-root ""
       gnus-sum-thread-tree-indent " "
       gnus-sum-thread-tree-leaf-with-other "├► "
@@ -106,7 +103,7 @@
  gnus-treat-x-pgp-sig t
  mm-verify-option 'always
  mm-decrypt-option 'always
- mm-sign-option nil ;; mm-sign-option 'guided
+ mm-sign-option 'guided
  gnus-buttonized-mime-types
  '("multipart/alternative" "multipart/encrypted" "multipart/signed"))
 
@@ -115,8 +112,6 @@
     (search-backward "Content-Type: application/pgp-signature")
     (goto-char (point-at-eol))
     (insert "; name=\"signature.asc\"; description=\"Digital signature\"")))
-
-(add-hook 'message-send-hook (lambda () (mml-secure-message-sign-pgpmime)))
 
 (defun gmail-archive ()
   "Archive the current or marked mails.
