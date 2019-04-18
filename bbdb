@@ -1,6 +1,7 @@
 ;; -*- mode: Emacs-Lisp; coding: utf-8; -*-
 ;;; file-format: 9
 ["Chris" "Gregory" nil ("Chris Gregory") nil nil nil ("chris.gregory@solarreserve.com") nil "77832994-77b2-418e-9732-660f5b9cbb37" "2019-04-17 03:23:01 +0000" "2019-04-17 03:40:01 +0000" nil]
+["Richard" "Schwamb" nil nil nil nil nil ("Richard.Schwamb@morganstanley.com") nil "28605a11-b900-420e-b9da-c2c53d2acc73" "2019-04-18 03:35:55 +0000" "2019-04-18 03:35:55 +0000" nil]
 ["Wey" "Wang" nil ("Wey Wang") nil nil nil ("wey.wang@gmail.com") nil "f7468d35-b87d-4abd-ba7b-76fe95b58f51" "2019-04-17 03:23:01 +0000" "2019-04-17 03:23:01 +0000" nil]
 ["Vishnu" "Vyas" nil ("Vishnu Vyas") nil nil nil ("vishnuvyas@hotmail.com" "vishnuvyasmuni@gmail.com") nil "5c2a80d7-162f-4c0a-9631-7c26954202f9" "2019-04-17 03:23:01 +0000" "2019-04-17 03:23:01 +0000" nil]
 ["Vera" "Rosenberg" nil ("Vera Rosenberg") nil nil nil ("vera214usc@gmail.com") nil "65300eea-d865-4cda-adf1-08c15925770e" "2019-04-17 03:23:01 +0000" "2019-04-17 03:23:01 +0000" nil]
