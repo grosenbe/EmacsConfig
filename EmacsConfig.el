@@ -45,4 +45,6 @@
 
 (setq dired-listing-switches "-ahl --group-directories-first")
 
+(setq compilation-scroll-output t)
+
 (provide 'EmacsConfig)

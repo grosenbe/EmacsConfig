@@ -22,10 +22,9 @@
 ;; We don't want local, unencrypted copies of emails we write.
 (setq gnus-message-archive-group nil)
 
-;; CGR To Try
 ;; ; Archive outgoing email in Sent folder on imap.gmail.com:
-;; (setq gnus-message-archive-method '(nnimap "imap.gmail.com")
-;;       gnus-message-archive-group "[Gmail]/Sent Mail")
+(setq gnus-message-archive-method '(nnimap "imap.gmail.com")
+      gnus-message-archive-group "[Gmail]/Sent Mail")
 
 ;; Attempt to encrypt all the mails we'll be sending.
 ;; can just delete the setting when typing the message if desired
@@ -35,9 +34,8 @@
       '((not gnus-thread-sort-by-date)
       gnus-thread-sort-by-number))
 
-;;get gnus demon to scan for new email when emacs is idle.
 (setq gnus-demon-timestep 60) ;; gnus demon timestep in seconds
-(gnus-demon-add-handler 'gnus-demon-scan-news 2 t) ;; scan news/mail every 3 timesteps, only when emacs is idle
+(gnus-demon-add-handler 'gnus-demon-scan-news 2 t)
 
 (require 'gnus-notify)			;modeline notifications
 ;;gnus-desktop-notify generates notifications whenever the group buffer is updated.
@@ -85,12 +83,12 @@
 (setq bbdb-complete-mail-allow-cycling t)
 
  ;; Signature
-(setq gnus-posting-styles '((".*" (signature "Best regards,\nGeoff Rosenberg"))))
+(setq gnus-posting-styles '((".*" (signature "Geoff Rosenberg"))))
 
 ;; pgp signing
 (require 'epg-config)
 (setq
- epg-debug t ;;  *epg-debug*" buffer
+ epg-debug t
  mml2015-use 'epg
  mml2015-verbose t
  mml2015-encrypt-to-self t
