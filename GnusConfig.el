@@ -45,6 +45,7 @@
 ;; n: Sender name from header; B: Thread level; U: unread; D: date; s: subject; F: full From header; R: Secondary mark
 (setq gnus-extra-headers
       '(To Newsgroups))
+(setq gnus-ignored-from-addresses "geoff.rosenberg@gmail.com")
 (setq gnus-summary-line-format "%U%R %*%-30f %B %&user-date; %s\n"
       gnus-sum-thread-tree-false-root ""
       gnus-sum-thread-tree-indent " "
