@@ -45,11 +45,9 @@
 
 (setq dired-listing-switches "-ahl --group-directories-first")
 
-<<<<<<< HEAD
 (add-hook 'c-mode-common-hook
 	  (lambda () (define-key c-mode-base-map (kbd "C-c C-f") 'recompile)))
-=======
+
 (setq compilation-scroll-output t)
->>>>>>> 62b82a3c0424faa995a14b8bc761ce85cc2e44a0
 
 (provide 'EmacsConfig)
