@@ -83,6 +83,8 @@
              (local-set-key (kbd "TAB") 'bbdb-complete-mail)))
 (setq bbdb-complete-mail-allow-cycling t)
 
+(setq mm-text-html-renderer 'shr)
+
  ;; Signature
 (setq gnus-posting-styles '((".*" (signature "Geoff Rosenberg"))))
 
