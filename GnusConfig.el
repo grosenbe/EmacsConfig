@@ -31,6 +31,7 @@
 
 (setq gnus-extra-headers
       '(To Newsgroups))
+(setq gnus-ignored-from-addresses "geoff.rosenberg@gmail.com")
 (setq gnus-summary-line-format "%U%R %*%-30f %B %&user-date; %s\n"
       gnus-sum-thread-tree-false-root ""
       gnus-sum-thread-tree-indent " "
@@ -64,6 +65,9 @@
              (local-set-key (kbd "TAB") 'bbdb-complete-mail)))
 (setq bbdb-complete-mail-allow-cycling t)
 
+(setq mm-text-html-renderer 'shr)
+
+ ;; Signature
 (setq gnus-posting-styles '((".*" (signature "Geoff Rosenberg"))))
 
 (with-eval-after-load "mm-decode"
