@@ -6,43 +6,29 @@
 	       (nnimap-address "imap.gmail.com")
 	       (nnimap-server-port 993)
 	       (nnimap-stream ssl)
-	       (nnmail-expiry-target "nnimap+gmail:[Gmail]/Trash")  ; Move expired messages to Gmail's trash.
-	       (nnmail-expiry-wait immediate)))			    ; mails marked as expired can be processed immediately
+	       (nnmail-expiry-target "nnimap+gmail:[Gmail]/Trash")
+	       (nnmail-expiry-wait immediate)))
 
-;; Gmail system labels have the prefix [Gmail], which matches
-;; the default value of gnus-ignored-newsgroups. That's why we
-;; redefine it.
 (setq smtpmail-smtp-server "smtp.gmail.com"
       smtpmail-smtp-service 587
       gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")
 
 (setq gnus-agent nil)
-(setq gnus-use-dribble-file nil)	;no dribble file
+(setq gnus-use-dribble-file nil)
 
-;; We don't want local, unencrypted copies of emails we write.
-(setq gnus-message-archive-group nil)
-
-;; ; Archive outgoing email in Sent folder on imap.gmail.com:
-(setq gnus-message-archive-method '(nnimap "imap.gmail.com")
-      gnus-message-archive-group "[Gmail]/Sent Mail")
-
-;; Attempt to encrypt all the mails we'll be sending.
-;; can just delete the setting when typing the message if desired
 (add-hook 'message-setup-hook 'mml-secure-message-encrypt)
 
 (setq gnus-thread-sort-functions
       '((not gnus-thread-sort-by-date)
       gnus-thread-sort-by-number))
 
-(setq gnus-demon-timestep 60) ;; gnus demon timestep in seconds
+(setq gnus-demon-timestep 60)
 (gnus-demon-add-handler 'gnus-demon-scan-news 2 t)
 
-(require 'gnus-notify)			;modeline notifications
-;;gnus-desktop-notify generates notifications whenever the group buffer is updated.
+(require 'gnus-notify)
 (require 'gnus-desktop-notify)
 (gnus-desktop-notify-mode)
 
-;; n: Sender name from header; B: Thread level; U: unread; D: date; s: subject; F: full From header; R: Secondary mark
 (setq gnus-extra-headers
       '(To Newsgroups))
 (setq gnus-ignored-from-addresses "geoff.rosenberg@gmail.com")
@@ -56,29 +42,21 @@
 (setq gnus-user-date-format-alist
       '(((gnus-seconds-today) . "Today, %H:%M")
         ((+ 86400 (gnus-seconds-today)) . "Yesterday, %H:%M")
-        (604800 . "%A %H:%M") ;;that's one week
-        (t . "%Y-%m-%d %H:%M"))) ;;this one is used when no other does match
+        (604800 . "%A %H:%M")
+        (t . "%Y-%m-%d %H:%M")))
 
 (setq message-cite-style message-cite-style-gmail)
 
 ;; flyspell for new messages
-(add-hook 'message-mode-hook
-	  (lambda ()
-	    (flyspell-mode 1)
-	    )
-	  )
 
-;; BBDB: Address list
 (require 'bbdb)
 (bbdb-initialize 'message 'gnus 'sendmail)
-(add-hook 'gnus-startup-hook 'bbdb-insinuate-gnus)
+(add-hook 'gnus-startup-hook 'bbdb-initialize)
 (bbdb-mua-auto-update-init 'message)
 (setq bbdb-mua-auto-update-p 'query)
 (setq bbdb/mail-auto-create-p t
       bbdb/news-auto-create-p t)
 (setq bbdb-mua-auto-complete t)
-
-;; auto-complete emacs address using bbdb UI
 (add-hook 'message-mode-hook
           '(lambda ()
              (flyspell-mode t)
@@ -90,17 +68,20 @@
  ;; Signature
 (setq gnus-posting-styles '((".*" (signature "Geoff Rosenberg"))))
 
-;; pgp signing
+(with-eval-after-load "mm-decode"
+       (add-to-list 'mm-discouraged-alternatives "text/html")
+       (add-to-list 'mm-discouraged-alternatives "text/richtext"))
+
 (require 'epg-config)
 (setq
  epg-debug t
  mml2015-use 'epg
  mml2015-verbose t
- mml2015-encrypt-to-self t
- mml2015-always-trust nil
- mml2015-cache-passphrase t
- mml2015-passphrase-cache-expiry '36000
- mml2015-sign-with-sender t
+ mml-secure-openpgp-encrypt-to-self t
+ mml-secure-openpgp-always-trust nil
+ mml-secure-cache-passphrase t
+ mml-secure-passphrase-cache-expiry '36000
+ mml-secure-openpgp-sign-with-sender t
  gnus-message-replyencrypt t
  gnus-message-replysign t
  gnus-message-replysignencrypted t
