@@ -8,11 +8,12 @@
 (setq ido-everywhere t)
 (ido-mode t)
 (setq column-number-mode t)
-(delete-selection-mode 1)		;"insert" key
+(delete-selection-mode 1)
 (show-paren-mode 1) 			;highlight matching parenthesis
-(display-time-mode 1)                   ;show the time in the modeline
+(global-set-key (kbd "C-c b") 'blink-matching-open)
+(display-time-mode 1)
 (global-set-key (kbd "C-c w") 'toggle-truncate-lines)
-(setq-default fill-column 80)		;wrap at 80 columns for all text modes
+(setq dired-listing-switches "-ahl --group-directories-first")
 
 (require 'recentf)
 (recentf-mode 1)
@@ -20,6 +21,7 @@
 (setq recentf-exclude '("/org/"))
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
+(setq-default fill-column 80)
 (setq latex-run-command "latexmk")
 (setq tex-start-commands "")
 (setq sentence-end-double-space nil)
@@ -38,16 +40,10 @@
 
 (global-set-key (kbd "C-x g") 'magit-status)
 (add-hook 'git-commit-setup-hook
-     (lambda ()
-       (flyspell-mode 1)
-       )
-     )
-
-(setq dired-listing-switches "-ahl --group-directories-first")
+	  (lambda () (flyspell-mode 1)))
 
 (add-hook 'c-mode-common-hook
 	  (lambda () (define-key c-mode-base-map (kbd "C-c C-f") 'recompile)))
-
 (setq compilation-scroll-output t)
 
 (provide 'EmacsConfig)

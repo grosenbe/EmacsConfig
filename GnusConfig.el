@@ -59,6 +59,8 @@
         (604800 . "%A %H:%M") ;;that's one week
         (t . "%Y-%m-%d %H:%M"))) ;;this one is used when no other does match
 
+(setq message-cite-style message-cite-style-gmail)
+
 ;; flyspell for new messages
 (add-hook 'message-mode-hook
 	  (lambda ()
