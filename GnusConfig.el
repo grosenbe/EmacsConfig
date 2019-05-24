@@ -13,8 +13,9 @@
       smtpmail-smtp-service 587
       gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")
 
-(setq gnus-agent nil)
-(setq gnus-use-dribble-file nil)
+(setq gnus-agent nil
+      gnus-use-dribble-file nil
+      gnus-message-archive-method nil)
 
 (add-hook 'message-setup-hook 'mml-secure-message-encrypt)
 
