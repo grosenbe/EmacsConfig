@@ -85,7 +85,7 @@
 (setq bbdb-complete-mail-allow-cycling t)
 
  ;; Signature
-(setq gnus-posting-styles '((".*" (signature "Best regards,\nGeoff Rosenberg"))))
+(setq gnus-posting-styles '((".*" (signature "Geoff Rosenberg\n650-823-5290"))))
 
 ;; pgp signing
 (require 'epg-config)
