@@ -1,6 +1,8 @@
 (setq user-mail-address "geoff.rosenberg@gmail.com"
       user-full-name "Geoff Rosenberg")
 
+(gnus-add-configuration '(article (horizontal 1.0 (summary .25 point) (article 1.0))))
+
 (setq gnus-select-method
       '(nnimap "gmail"
 	       (nnimap-address "imap.gmail.com")
@@ -42,9 +44,9 @@
       gnus-sum-thread-tree-vertical "│")
 (setq gnus-user-date-format-alist
       '(((gnus-seconds-today) . "Today, %H:%M")
-        ((+ 86400 (gnus-seconds-today)) . "Yesterday, %H:%M")
-        (604800 . "%A %H:%M")
-        (t . "%Y-%m-%d %H:%M")))
+	((+ 86400 (gnus-seconds-today)) . "Yesterday, %H:%M")
+	(604800 . "%A %H:%M")
+	(t . "%Y-%m-%d %H:%M")))
 
 (setq message-cite-style message-cite-style-gmail)
 
@@ -59,9 +61,9 @@
       bbdb/news-auto-create-p t)
 (setq bbdb-mua-auto-complete t)
 (add-hook 'message-mode-hook
-          '(lambda ()
-             (flyspell-mode t)
-             (local-set-key (kbd "TAB") 'bbdb-complete-mail)))
+	  '(lambda ()
+	     (flyspell-mode t)
+	     (local-set-key (kbd "TAB") 'bbdb-complete-mail)))
 (setq bbdb-complete-mail-allow-cycling t)
 
 (setq mm-text-html-renderer 'shr)
