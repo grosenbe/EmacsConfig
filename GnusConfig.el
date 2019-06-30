@@ -35,7 +35,7 @@
 (setq gnus-extra-headers
       '(To Newsgroups))
 (setq gnus-ignored-from-addresses "geoff.rosenberg@gmail.com")
-(setq gnus-summary-line-format "%U%R %*%-30f %B %&user-date; %s\n"
+(setq gnus-summary-line-format "%U%R %*%-20f %B %&user-date; %s\n"
       gnus-sum-thread-tree-false-root ""
       gnus-sum-thread-tree-indent " "
       gnus-sum-thread-tree-leaf-with-other "├► "
