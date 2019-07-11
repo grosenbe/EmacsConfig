@@ -48,4 +48,10 @@
 	  (lambda () (define-key c-mode-base-map (kbd "C-c C-f") 'recompile)))
 (setq compilation-scroll-output t)
 
+(add-hook
+ 'dired-before-readin-hook
+ (lambda ()
+   (when (file-remote-p default-directory)
+     (setq dired-actual-switches "-al"))))
+
 (provide 'EmacsConfig)
