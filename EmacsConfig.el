@@ -13,7 +13,7 @@
 (global-set-key (kbd "C-c b") 'blink-matching-open)
 (display-time-mode 1)
 (global-set-key (kbd "C-c w") 'toggle-truncate-lines)
-(setq dired-listing-switches "-ahl --group-directories-first")
+(setq dired-listing-switches "-ahl")
 (global-set-key (kbd "C-c m c") 'mc/edit-lines)
 
 (require 'recentf)
@@ -30,10 +30,14 @@
 
 (require 'package)
 (add-to-list 'package-archives
-	     '("melpa" . "https://melpa.org/packages/"))
+	     '("melpa" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives
+             '("org" . "http://orgmode.org/elpa/") t)
+(package-initialize)
 
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
+(setq org-default-notes-file (concat org-directory '"/notes.org"))
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((C          . t)
@@ -53,5 +57,53 @@
  (lambda ()
    (when (file-remote-p default-directory)
      (setq dired-actual-switches "-al"))))
+
+(require 'use-package)
+
+(use-package company :ensure t
+  :config
+  (progn
+    (setq company-minimum-prefix-length 2
+          company-selection-wrap-around t
+          company-show-numbers t
+          company-tooltip-align-annotations t
+          company-require-match nil
+          company-transformers '(company-sort-by-occurrence)
+          company-idle-delay 0.1)
+    (global-company-mode)))
+
+(use-package company-ghci :ensure t
+ :config
+  (progn
+    (push 'company-ghci company-backends)
+    (add-hook 'haskell-mode-hook 'company-mode)
+    (add-hook 'haskell-interactive-mode-hook 'company-mode)))
+
+(use-package powerline :ensure t
+  :config
+  (powerline-default-theme))
+
+(use-package projectile :ensure t
+  :config
+  (progn
+    (projectile-global-mode)
+    (defun set-gopath-smart ()
+      "Reset GOPATH if a vendor dir exists in the project root"
+      (let ((vendor-dir (expand-file-name "vendor" (projectile-project-root))))
+        (when (file-exists-p vendor-dir)
+          (setenv "GOPATH" (concat vendor-dir path-separator (getenv "GOPATH"))))))
+    (add-hook 'projectile-after-switch-project-hook 'set-gopath-smart))
+  :bind
+  (("C-c p h" . projectile-find-file)
+   ("C-c p s" . projectile-switch-project)))
+
+(use-package p4 :ensure t)
+
+(use-package omnisharp :ensure t)
+
+(eval-after-load
+    'company
+  '(add-to-list 'company-backends 'company-omnisharp))
+(add-hook 'csharp-mode-hook #'company-mode)
 
 (provide 'EmacsConfig)
