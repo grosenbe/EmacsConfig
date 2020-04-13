@@ -34,7 +34,7 @@
 
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
-(setq org-default-notes-file (concat org-agenda-files '"/notes.org"))
+(setq org-default-notes-file (concat org-directory "/notes.org"))
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((C          . t)
