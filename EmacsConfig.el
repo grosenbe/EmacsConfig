@@ -119,6 +119,8 @@
 
 (use-package omnisharp :ensure t)
 
+(use-package tide :ensure t)
+
 (use-package counsel :ensure t
   :diminish (ivy-mode . "")
   :bind
