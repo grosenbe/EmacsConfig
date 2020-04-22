@@ -11,6 +11,9 @@
 (global-set-key (kbd "C-c w") 'toggle-truncate-lines)
 (setq dired-listing-switches "-ahl")
 (global-set-key (kbd "C-c m c") 'mc/edit-lines)
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+
+(setq-default indent-tabs-mode nil)
 
 (require 'recentf)
 (recentf-mode 1)
@@ -18,7 +21,7 @@
 (setq recentf-exclude '("/org/"))
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
-(setq-default fill-column 80)
+(setq-default fill-column 100)
 (setq org-latex-compiler "xelatex")
 (setq latex-run-command "latexmk")
 (setq tex-start-commands "")
@@ -75,7 +78,8 @@
 	  company-tooltip-align-annotations t
 	  company-require-match nil
 	  company-transformers '(company-sort-by-occurrence)
-	  company-idle-delay 0.1)
+	  company-idle-delay 0.1
+          company-dabbrev-downcase nil)
     (global-company-mode)))
 
 (use-package company-ghci :ensure t
@@ -173,6 +177,7 @@
     ))
 
 (use-package markdown-mode
+  :ensure t
   :mode ("\\.text\\'" "\\.markdown\\'" "\\.md\\'"))
 
 (use-package clang-format
