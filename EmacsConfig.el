@@ -57,6 +57,16 @@
    (when (file-remote-p default-directory)
      (setq dired-actual-switches "-al"))))
 
+(defun colorize-compilation-buffer ()
+  "Colorize the compilation filter buffer from start to point-max."
+  (when (eq major-mode 'compilation-mode)
+    (ansi-color-apply-on-region compilation-filter-start (point-max))))
+(use-package ansi-color
+  :ensure t
+  :config
+  (add-hook 'compilation-filter-hook 'colorize-compilation-buffer))
+
+
 (require 'use-package)
 
 (use-package org-bullets :ensure t
@@ -108,18 +118,18 @@
    ("C-c p o" . projectile-find-other-file-other-window)
    ("C-c p s" . projectile-switch-project)))
 
-;; (use-package p4 :ensure t)
-;; (defun p4-tramp-workaround-find-file-hook ()
-;;     "do not let p4.el process remote TRAMP buffers"
-;;     (when
-;;         (and (fboundp 'tramp-tramp-file-p)
-;;              (not (tramp-tramp-file-p buffer-file-name)))
-;;       (p4-update-status)))
+(use-package p4 :ensure t)
+(defun p4-tramp-workaround-find-file-hook ()
+  "do not let p4.el process remote TRAMP buffers"
+  (when
+      (and (fboundp 'tramp-tramp-file-p)
+           (not (tramp-tramp-file-p buffer-file-name)))
+    (p4-update-status)))
 
-;; ;; p4.el adds p4-update-status to find-file-hook
-;; ;; we replace it with a wrapper that filters out remote buffers.
-;; (remove-hook 'find-file-hook 'p4-update-status)
-;; (add-hook 'find-file-hooks 'p4-tramp-workaround-find-file-hook)
+;; p4.el adds p4-update-status to find-file-hook
+;; we replace it with a wrapper that filters out remote buffers.
+(remove-hook 'find-file-hook 'p4-update-status)
+(add-hook 'find-file-hooks 'p4-tramp-workaround-find-file-hook)
 
 (use-package omnisharp :ensure t)
 
