@@ -2,7 +2,11 @@
 ;;; file-format: 9
 ["Phil" "Bradley" nil nil nil nil nil ("pbradley@blueorigin.com") nil "9b0321de-2df0-41ef-8b82-0188202b8c24" "2019-05-28 03:19:28 +0000" "2019-05-28 03:19:28 +0000" nil]
 ["Chris" "Gregory" nil ("Chris Gregory") nil nil nil ("chris.gregory@solarreserve.com") nil "77832994-77b2-418e-9732-660f5b9cbb37" "2019-04-17 03:23:01 +0000" "2019-04-17 03:40:01 +0000" nil]
+["Rachel" "Harris" nil nil nil nil nil ("harrisr@fb.com") nil "266fe0bf-395d-47eb-9ff8-8d597b8ea640" "2019-11-28 07:17:30 +0000" "2019-11-28 07:17:30 +0000" nil]
+["Emily" "Lam" nil nil nil nil nil ("emily.lam@redfin.com") nil "41852ab6-bd0c-4c01-85eb-70d6f2940591" "2020-02-23 01:10:17 +0000" "2020-02-23 01:10:17 +0000" nil]
 ["Geoff" "Rosenberg" nil nil nil nil nil ("crosenbe@blueorigin.com" "geoff.rosenberg@gmail.com") nil "bcb198af-8e47-42ed-a431-0cc00e2f5586" "2019-05-02 00:37:56 +0000" "2019-05-24 04:05:44 +0000" nil]
+["Mary Catherine" "Rosenberg" nil nil nil nil nil ("kaer@icloud.com") nil "40f0f541-d720-4c9c-8d02-8077b7883992" "2019-12-31 04:45:53 +0000" "2019-12-31 04:45:53 +0000" nil]
+["Angelo" "Sacramento" nil nil nil nil nil ("angelosac@fb.com") nil "ed5b1057-fbfb-4ca4-84ca-9136be5a7ce3" "2019-11-04 01:38:47 +0000" "2019-11-04 01:38:47 +0000" nil]
 ["Richard" "Schwamb" nil nil nil nil nil ("Richard.Schwamb@morganstanley.com") nil "28605a11-b900-420e-b9da-c2c53d2acc73" "2019-04-18 03:35:55 +0000" "2019-04-18 03:35:55 +0000" nil]
 ["Wey" "Wang" nil ("Wey Wang") nil nil nil ("wey.wang@gmail.com") nil "f7468d35-b87d-4abd-ba7b-76fe95b58f51" "2019-04-17 03:23:01 +0000" "2019-04-17 03:23:01 +0000" nil]
 ["Vishnu" "Vyas" nil ("Vishnu Vyas") nil nil nil ("vishnuvyas@hotmail.com" "vishnuvyasmuni@gmail.com") nil "5c2a80d7-162f-4c0a-9631-7c26954202f9" "2019-04-17 03:23:01 +0000" "2019-04-17 03:23:01 +0000" nil]

@@ -32,8 +32,7 @@
        (add-to-list 'package-archives
 		    '("melpa" . "https://melpa.org/packages/") t)
        (add-to-list 'package-archives
-		    '("org" . "http://orgmode.org/elpa/") t)
-       (package-initialize)))
+		    '("org" . "http://orgmode.org/elpa/") t)))
 
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
@@ -116,7 +115,9 @@
   :bind
   (("C-c p h" . projectile-find-file)
    ("C-c p o" . projectile-find-other-file-other-window)
-   ("C-c p s" . projectile-switch-project)))
+   ("C-c p s" . projectile-switch-project)
+   ("C-c p t" . projectile-find-tag)
+   ("C-c p g" . projectile-grep)))
 
 (use-package p4 :ensure t)
 (defun p4-tramp-workaround-find-file-hook ()
