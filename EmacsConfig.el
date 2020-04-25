@@ -12,6 +12,7 @@
 (setq dired-listing-switches "-ahl")
 (global-set-key (kbd "C-c m c") 'mc/edit-lines)
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+(global-set-key (kbd "C-c C-f") 'recompile)
 
 (setq-default indent-tabs-mode nil)
 
@@ -111,7 +112,8 @@
       (let ((vendor-dir (expand-file-name "vendor" (projectile-project-root))))
 	(when (file-exists-p vendor-dir)
 	  (setenv "GOPATH" (concat vendor-dir path-separator (getenv "GOPATH"))))))
-    (add-hook 'projectile-after-switch-project-hook 'set-gopath-smart))
+    (add-hook 'projectile-after-switch-project-hook 'set-gopath-smart)
+    (setq projectile-completion-system 'ivy))
   :bind
   (("C-c p h" . projectile-find-file)
    ("C-c p o" . projectile-find-other-file-other-window)
@@ -200,8 +202,8 @@
       (when (and (or (eq major-mode 'c++-mode)
                      (eq major-mode 'c-mode))
                  (file-exists-p (expand-file-name ".clang-format" (projectile-project-root))))
-        (clang-format-buffer)))
-
+        (clang-format-buffer)
+        (message "ran clang-format")))
     (add-hook 'before-save-hook 'clang-format-buffer-smart)))
 
 (eval-after-load
