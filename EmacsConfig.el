@@ -15,7 +15,7 @@
 
 (setq-default indent-tabs-mode nil)
 
-(defun xah-copy-file-path (&optional @dir-path-only-p)
+(defun cgr-copy-file-path (&optional @dir-path-only-p)
   "Copy the current buffer's file path or dired path to `kill-ring'.
 Result is full path.
 If `universal-argument' is called first, copy only the dir path.
@@ -45,7 +45,7 @@ Version 2017-09-01"
        (progn
          (message "File path copied: %s" $fpath)
          $fpath )))))
-(global-set-key (kbd "C-c g") 'xah-copy-file-path)
+(global-set-key (kbd "C-c g") 'cgr-copy-file-path)
 
 (require 'recentf)
 (recentf-mode 1)
@@ -88,6 +88,8 @@ Version 2017-09-01"
    (when (file-remote-p default-directory)
      (setq dired-actual-switches "-al"))))
 
+(require 'use-package)
+
 (defun colorize-compilation-buffer ()
   "Colorize the compilation filter buffer from start to point-max."
   (when (eq major-mode 'compilation-mode)
@@ -96,9 +98,6 @@ Version 2017-09-01"
   :ensure t
   :config
   (add-hook 'compilation-filter-hook 'colorize-compilation-buffer))
-
-
-(require 'use-package)
 
 (use-package org-bullets :ensure t
   :config
@@ -233,12 +232,30 @@ Version 2017-09-01"
       (when (and (or (eq major-mode 'c++-mode)
                      (eq major-mode 'c-mode))
                  (file-exists-p (expand-file-name ".clang-format" (projectile-project-root))))
-        (clang-format-buffer)))
+        (clang-format-buffer)
+        (message '"ran clang format")))
     (add-hook 'before-save-hook 'clang-format-buffer-smart)))
 
-(eval-after-load
+(eval-after-loadn
     'company
   '(add-to-list 'company-backends 'company-omnisharp))
 (add-hook 'csharp-mode-hook #'company-mode)
+
+;; see https://www.mortens.dev/blog/emacs-and-the-language-server-protocol/
+(use-package lsp-mode
+  :ensure t
+  :config
+  ;; `-background-index' requires clangd v8+!
+  (setq lsp-clients-clangd-args '("-j=4" "-log=error"))
+
+  ;; ..
+  )
+
+(use-package company-lsp
+  :ensure t
+  :config
+  (progn
+    (push 'company-ghci company-backends)
+    ))
 
 (provide 'EmacsConfig)
