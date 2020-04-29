@@ -10,6 +10,8 @@
 (global-set-key (kbd "C-c w") 'toggle-truncate-lines)
 (global-set-key (kbd "C-c m c") 'mc/edit-lines)
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+(global-set-key (kbd "C-c C-f") 'recompile)
+
 (setq-default indent-tabs-mode nil)
 (setq column-number-mode t
       dired-listing-switches "-ahl")
