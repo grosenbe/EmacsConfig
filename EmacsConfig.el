@@ -63,9 +63,9 @@ Version 2017-09-01"
 (cond ((>= emacs-major-version 25)
        (require 'package)
        (add-to-list 'package-archives
-		    '("melpa" . "https://melpa.org/packages/") t)
+                    '("melpa" . "https://melpa.org/packages/") t)
        (add-to-list 'package-archives
-		    '("org" . "https://orgmode.org/elpa/") t)))
+                    '("org" . "https://orgmode.org/elpa/") t)))
 
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
@@ -77,10 +77,10 @@ Version 2017-09-01"
 
 (global-set-key (kbd "C-x g") 'magit-status)
 (add-hook 'git-commit-setup-hook
-	  (lambda () (flyspell-mode 1)))
+          (lambda () (flyspell-mode 1)))
 
 (add-hook 'c-mode-common-hook
-	  (lambda () (define-key c-mode-base-map (kbd "C-c C-f") 'recompile)))
+          (lambda () (define-key c-mode-base-map (kbd "C-c C-f") 'recompile)))
 (setq compilation-scroll-output t)
 
 (add-hook
@@ -111,12 +111,12 @@ Version 2017-09-01"
   :config
   (progn
     (setq company-minimum-prefix-length 2
-	  company-selection-wrap-around t
-	  company-show-numbers t
-	  company-tooltip-align-annotations t
-	  company-require-match nil
-	  company-transformers '(company-sort-by-occurrence)
-	  company-idle-delay 0.1
+          company-selection-wrap-around t
+          company-show-numbers t
+          company-tooltip-align-annotations t
+          company-require-match nil
+          company-transformers '(company-sort-by-occurrence)
+          company-idle-delay 0.1
           company-dabbrev-downcase nil)
     (global-company-mode)))
 
@@ -138,8 +138,8 @@ Version 2017-09-01"
     (defun set-gopath-smart ()
       "Reset GOPATH if a vendor dir exists in the project root"
       (let ((vendor-dir (expand-file-name "vendor" (projectile-project-root))))
-	(when (file-exists-p vendor-dir)
-	  (setenv "GOPATH" (concat vendor-dir path-separator (getenv "GOPATH"))))))
+        (when (file-exists-p vendor-dir)
+          (setenv "GOPATH" (concat vendor-dir path-separator (getenv "GOPATH"))))))
     (add-hook 'projectile-after-switch-project-hook 'set-gopath-smart)
     (setq projectile-completion-system 'ivy))
   :bind
@@ -172,9 +172,6 @@ Version 2017-09-01"
   (setq flycheck-check-syntax-automatically '(save mode-enabled))
   (eldoc-mode +1)
   (tide-hl-identifier-mode +1)
-  ;; company is an optional dependency. You have to
-  ;; install it separately via package-install
-  ;; `M-x package-install [ret] company`
   (company-mode +1))
 
 ;; aligns annotation to the right hand side
@@ -244,7 +241,8 @@ Version 2017-09-01"
   :ensure t
   :config
   ;; `-background-index' requires clangd v8+!
-  (setq lsp-clients-clangd-args '("-j=4" "-log=error"))
+  (add-hook 'c++-mode-hook #'lsp)
+  (setq lsp-clients-clangd-args '("-j=4" "-background-index" "-log=error"))
 
   ;; ..
   )
