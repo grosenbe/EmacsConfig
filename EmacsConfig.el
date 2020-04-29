@@ -3,20 +3,22 @@
 
 ;; convenience stuff
 (global-set-key (kbd "<C-tab>") 'other-window)
-(setq column-number-mode t)
 (delete-selection-mode 1)
 (show-paren-mode 1)			;highlight matching parenthesis
 (global-set-key (kbd "C-c b") 'blink-matching-open)
 (display-time-mode 1)
 (global-set-key (kbd "C-c w") 'toggle-truncate-lines)
-(setq dired-listing-switches "-ahl")
 (global-set-key (kbd "C-c m c") 'mc/edit-lines)
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 (global-set-key (kbd "C-c C-f") 'recompile)
 
 (setq-default indent-tabs-mode nil)
+(setq column-number-mode t
+      dired-listing-switches "-ahl")
+(menu-bar-mode -1)
+(tool-bar-mode -1)
 
-(defun xah-copy-file-path (&optional @dir-path-only-p)
+(defun cgr-copy-file-path (&optional @dir-path-only-p)
   "Copy the current buffer's file path or dired path to `kill-ring'.
 Result is full path.
 If `universal-argument' is called first, copy only the dir path.
@@ -46,7 +48,7 @@ Version 2017-09-01"
        (progn
          (message "File path copied: %s" $fpath)
          $fpath )))))
-(global-set-key (kbd "C-c g") 'xah-copy-file-path)
+(global-set-key (kbd "C-c g") 'cgr-copy-file-path)
 
 (require 'recentf)
 (recentf-mode 1)
@@ -63,9 +65,9 @@ Version 2017-09-01"
 (cond ((>= emacs-major-version 25)
        (require 'package)
        (add-to-list 'package-archives
-		    '("melpa" . "https://melpa.org/packages/") t)
+                    '("melpa" . "https://melpa.org/packages/") t)
        (add-to-list 'package-archives
-		    '("org" . "http://orgmode.org/elpa/") t)))
+                    '("org" . "https://orgmode.org/elpa/") t)))
 
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
@@ -77,10 +79,10 @@ Version 2017-09-01"
 
 (global-set-key (kbd "C-x g") 'magit-status)
 (add-hook 'git-commit-setup-hook
-	  (lambda () (flyspell-mode 1)))
+          (lambda () (flyspell-mode 1)))
 
 (add-hook 'c-mode-common-hook
-	  (lambda () (define-key c-mode-base-map (kbd "C-c C-f") 'recompile)))
+          (lambda () (define-key c-mode-base-map (kbd "C-c C-f") 'recompile)))
 (setq compilation-scroll-output t)
 
 (add-hook
@@ -89,17 +91,13 @@ Version 2017-09-01"
    (when (file-remote-p default-directory)
      (setq dired-actual-switches "-al"))))
 
+(require 'use-package)
+
 (defun colorize-compilation-buffer ()
   "Colorize the compilation filter buffer from start to point-max."
   (when (eq major-mode 'compilation-mode)
     (ansi-color-apply-on-region compilation-filter-start (point-max))))
-(use-package ansi-color
-  :ensure t
-  :config
-  (add-hook 'compilation-filter-hook 'colorize-compilation-buffer))
-
-
-(require 'use-package)
+(add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
 
 (use-package org-bullets :ensure t
   :config
@@ -115,12 +113,12 @@ Version 2017-09-01"
   :config
   (progn
     (setq company-minimum-prefix-length 2
-	  company-selection-wrap-around t
-	  company-show-numbers t
-	  company-tooltip-align-annotations t
-	  company-require-match nil
-	  company-transformers '(company-sort-by-occurrence)
-	  company-idle-delay 0.1
+          company-selection-wrap-around t
+          company-show-numbers t
+          company-tooltip-align-annotations t
+          company-require-match nil
+          company-transformers '(company-sort-by-occurrence)
+          company-idle-delay 0.1
           company-dabbrev-downcase nil)
     (global-company-mode)))
 
@@ -142,8 +140,8 @@ Version 2017-09-01"
     (defun set-gopath-smart ()
       "Reset GOPATH if a vendor dir exists in the project root"
       (let ((vendor-dir (expand-file-name "vendor" (projectile-project-root))))
-	(when (file-exists-p vendor-dir)
-	  (setenv "GOPATH" (concat vendor-dir path-separator (getenv "GOPATH"))))))
+        (when (file-exists-p vendor-dir)
+          (setenv "GOPATH" (concat vendor-dir path-separator (getenv "GOPATH"))))))
     (add-hook 'projectile-after-switch-project-hook 'set-gopath-smart)
     (setq projectile-completion-system 'ivy))
   :bind
@@ -176,9 +174,6 @@ Version 2017-09-01"
   (setq flycheck-check-syntax-automatically '(save mode-enabled))
   (eldoc-mode +1)
   (tide-hl-identifier-mode +1)
-  ;; company is an optional dependency. You have to
-  ;; install it separately via package-install
-  ;; `M-x package-install [ret] company`
   (company-mode +1))
 
 ;; aligns annotation to the right hand side
@@ -235,12 +230,30 @@ Version 2017-09-01"
                      (eq major-mode 'c-mode))
                  (file-exists-p (expand-file-name ".clang-format" (projectile-project-root))))
         (clang-format-buffer)
-        (message "ran clang-format")))
+        (message '"ran clang format")))
     (add-hook 'before-save-hook 'clang-format-buffer-smart)))
 
 (eval-after-load
     'company
   '(add-to-list 'company-backends 'company-omnisharp))
 (add-hook 'csharp-mode-hook #'company-mode)
+
+;; see https://www.mortens.dev/blog/emacs-and-the-language-server-protocol/
+(use-package lsp-mode
+  :ensure t
+  :config
+  ;; `-background-index' requires clangd v8+!
+  (add-hook 'c++-mode-hook #'lsp)
+  (setq lsp-clients-clangd-args '("-j=4" "-background-index" "-log=error"))
+
+  ;; ..
+  )
+
+(use-package company-lsp
+  :ensure t
+  :config
+  (progn
+    (push 'company-ghci company-backends)
+    ))
 
 (provide 'EmacsConfig)
