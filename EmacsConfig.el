@@ -230,8 +230,10 @@ Version 2017-09-01"
                      (eq major-mode 'c-mode))
                  (file-exists-p (expand-file-name ".clang-format" (projectile-project-root))))
         (clang-format-buffer)
-        (message '"ran clang format")))
-    (add-hook 'before-save-hook 'clang-format-buffer-smart)))
+        (message "ran clang format")))
+    (add-hook 'before-save-hook 'clang-format-buffer-smart)
+    (if (file-directory-p "~/tableau-cache")
+        (setq clang-format-executable "~/tableau-cache/devtools/clang/7.0.4/bin/clang-format"))))
 
 (eval-after-load
     'company
@@ -244,9 +246,9 @@ Version 2017-09-01"
   :config
   ;; `-background-index' requires clangd v8+!
   (add-hook 'c++-mode-hook #'lsp)
-  (setq lsp-clients-clangd-args '("-j=4" "-background-index" "-log=error"))
-
-  ;; ..
+  (setq lsp-clients-clangd-args '("-j=4" "-log=error"))
+  (if (file-directory-p "~/tableau-cache")
+        (setq lsp-clients-clangd-executable "~/tableau-cache/devtools/clang/7.0.4/bin/clangd"))
   )
 
 (use-package company-lsp
