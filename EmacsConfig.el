@@ -206,15 +206,7 @@ Version 2017-09-01"
         '((t . ivy--regex-ignore-order)))
   ;; Show recently killed buffers when calling `ivy-switch-buffer'
   (setq ivy-use-virtual-buffers t)
-  (setq ivy-virtual-abbreviate 'full)   ;Show the full virtual file paths
-
-  (use-package counsel-etags :ensure t
-    :config
-    ;; (add-hook 'c-mode-common-hook
-    ;;           (lambda ()
-    ;;             (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
-    ;;               (counsel-etags-mode))))))
-    ))
+  (setq ivy-virtual-abbreviate 'full))   ;Show the full virtual file paths
 
 (use-package markdown-mode
   :ensure t
@@ -240,16 +232,22 @@ Version 2017-09-01"
   '(add-to-list 'company-backends 'company-omnisharp))
 (add-hook 'csharp-mode-hook #'company-mode)
 
-;; see https://www.mortens.dev/blog/emacs-and-the-language-server-protocol/
+(use-package yasnippet
+  :ensure t
+  )
+
+;; Note the use of background-index below requires installation of a *local* clangd with version >=
+;; 8.0. For kicks, I have compiled LLVM from source on grosenberg-lx, because there isn't a way to
+;; use yum/dnf to install a recent version of clangd on Cent 7.
 (use-package lsp-mode
   :ensure t
   :config
-  ;; `-background-index' requires clangd v8+!
   (add-hook 'c++-mode-hook #'lsp)
-  (setq lsp-clients-clangd-args '("-j=4" "-log=error"))
-  (if (file-directory-p "~/tableau-cache")
-        (setq lsp-clients-clangd-executable "~/tableau-cache/devtools/clang/7.0.4/bin/clangd"))
+  (setq lsp-clients-clangd-args '("-j=4" "-background-index" "-log=error"))
   )
+
+(use-package lsp-ui
+  :ensure t)
 
 (use-package company-lsp
   :ensure t
@@ -257,5 +255,15 @@ Version 2017-09-01"
   (progn
     (push 'company-ghci company-backends)
     ))
+
+(use-package treemacs
+  :ensure t)
+
+(use-package lsp-treemacs
+  :ensure t)
+
+(use-package treemacs-projectile
+  :ensure t)
+
 
 (provide 'EmacsConfig)
