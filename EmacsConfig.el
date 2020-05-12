@@ -271,14 +271,14 @@ Version 2017-09-01"
   :after treemacs projectile
   :ensure t)
 
-;; TODO make sure these are installed
-(require 'tableau-data-mode)
-(require 'tableau-template-mode)
-(setq auto-mode-alist
-    (append '(
-        ("\\.data$"  . tableau-data-mode)
-        ("\\.schema$"  . tableau-data-mode)
-        ("\\.template$"  . tableau-template-mode))
-        auto-mode-alist))
+(if (file-exists-p "~/.emacs.d/lisp/tableau-data-mode.el")
+    ((require 'tableau-data-mode)
+     (require 'tableau-template-mode)
+     (setq auto-mode-alist
+           (append '(
+                     ("\\.data$"  . tableau-data-mode)
+                     ("\\.schema$"  . tableau-data-mode)
+                     ("\\.template$"  . tableau-template-mode))
+                   auto-mode-alist))))
 
 (provide 'EmacsConfig)
