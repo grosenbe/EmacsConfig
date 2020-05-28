@@ -75,7 +75,11 @@ Version 2017-09-01"
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((C          . t)
-   (emacs-lisp . t)))
+   (emacs-lisp . t)
+   (dot        . t)
+   (ditaa      . t)))
+(setq org-src-fontify-natively t
+      org-confirm-babel-evaluate nil)
 
 (global-set-key (kbd "C-x g") 'magit-status)
 (add-hook 'git-commit-setup-hook
@@ -91,13 +95,14 @@ Version 2017-09-01"
    (when (file-remote-p default-directory)
      (setq dired-actual-switches "-al"))))
 
-(require 'use-package)
-
 (defun colorize-compilation-buffer ()
   "Colorize the compilation filter buffer from start to point-max."
   (when (eq major-mode 'compilation-mode)
     (ansi-color-apply-on-region compilation-filter-start (point-max))))
 (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+
+(require 'use-package)
+(use-package htmlize :ensure t)
 
 (use-package org-bullets :ensure t
   :config
@@ -161,7 +166,6 @@ Version 2017-09-01"
       (and (fboundp 'tramp-tramp-file-p)
            (not (tramp-tramp-file-p buffer-file-name)))
     (p4-update-status)))
-
 ;; p4.el adds p4-update-status to find-file-hook
 ;; we replace it with a wrapper that filters out remote buffers.
 (remove-hook 'find-file-hook 'p4-update-status)
@@ -234,6 +238,7 @@ Version 2017-09-01"
     'company
   '(add-to-list 'company-backends 'company-omnisharp))
 (add-hook 'csharp-mode-hook #'company-mode)
+(add-hook 'csharp-mode-hook 'omnisharp-mode)
 
 (use-package yasnippet
   :ensure t
@@ -246,7 +251,7 @@ Version 2017-09-01"
   :ensure t
   :config
   (add-hook 'c++-mode-hook #'lsp)
-  (setq lsp-clients-clangd-args '("-j=4" "-background-index" "-log=error"))
+  (setq lsp-clients-clangd-args '("-j=8" "-background-index" "-log=info"))
   )
 
 (use-package lsp-ui
@@ -266,6 +271,17 @@ Version 2017-09-01"
   :ensure t)
 
 (use-package treemacs-projectile
+  :after treemacs projectile
   :ensure t)
+
+(if (file-exists-p "~/.emacs.d/lisp/tableau-data-mode.el")
+    ((require 'tableau-data-mode)
+     (require 'tableau-template-mode)
+     (setq auto-mode-alist
+           (append '(
+                     ("\\.data$"  . tableau-data-mode)
+                     ("\\.schema$"  . tableau-data-mode)
+                     ("\\.template$"  . tableau-template-mode))
+                   auto-mode-alist))))
 
 (provide 'EmacsConfig)
