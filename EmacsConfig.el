@@ -129,9 +129,12 @@ Version 2017-09-01"
     (add-hook 'haskell-mode-hook 'company-mode)
     (add-hook 'haskell-interactive-mode-hook 'company-mode)))
 
-(use-package powerline :ensure t
+(use-package smart-mode-line :ensure t)
+(use-package smart-mode-line-powerline-theme :ensure t
   :config
-  (powerline-default-theme))
+  (setq sml/theme 'dark)
+  (sml/setup)
+  )
 
 (use-package projectile :ensure t
   :config
@@ -264,6 +267,5 @@ Version 2017-09-01"
 
 (use-package treemacs-projectile
   :ensure t)
-
 
 (provide 'EmacsConfig)
