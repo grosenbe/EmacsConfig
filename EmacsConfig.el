@@ -77,7 +77,8 @@ Version 2017-09-01"
  '((C          . t)
    (emacs-lisp . t)
    (dot        . t)
-   (ditaa      . t)))
+   (ditaa      . t)
+   (shell      . t)))
 (setq org-src-fontify-natively t
       org-confirm-babel-evaluate nil)
 
@@ -227,9 +228,7 @@ Version 2017-09-01"
                  (file-exists-p (expand-file-name ".clang-format" (projectile-project-root))))
         (clang-format-buffer)
         (message "ran clang format")))
-    (add-hook 'before-save-hook 'clang-format-buffer-smart)
-    (if (file-directory-p "~/tableau-cache")
-        (setq clang-format-executable "~/tableau-cache/devtools/clang/7.0.4/bin/clang-format"))))
+    (add-hook 'before-save-hook 'clang-format-buffer-smart)))
 
 (eval-after-load
     'company
@@ -248,8 +247,12 @@ Version 2017-09-01"
   :ensure t
   :config
   (add-hook 'c++-mode-hook #'lsp)
-  (setq lsp-clients-clangd-args '("-j=8" "-background-index" "-log=info"))
+  (setq lsp-clients-clangd-args '("-j=8" "-background-index" "-log=verbose"))
   )
+
+(use-package lsp-java
+  :ensure t)
+(add-hook 'java-mode-hook #'lsp)
 
 (use-package lsp-ui
   :ensure t)
@@ -271,14 +274,13 @@ Version 2017-09-01"
   :after treemacs projectile
   :ensure t)
 
-(if (file-exists-p "~/.emacs.d/lisp/tableau-data-mode.el")
-    ((require 'tableau-data-mode)
-     (require 'tableau-template-mode)
-     (setq auto-mode-alist
-           (append '(
-                     ("\\.data$"  . tableau-data-mode)
-                     ("\\.schema$"  . tableau-data-mode)
-                     ("\\.template$"  . tableau-template-mode))
-                   auto-mode-alist))))
+(require 'tableau-data-mode)
+(require 'tableau-template-mode)
+(setq auto-mode-alist
+      (append '(
+                ("\\.data$"  . tableau-data-mode)
+                ("\\.schema$"  . tableau-data-mode)
+                ("\\.template$"  . tableau-template-mode))
+              auto-mode-alist))
 
 (provide 'EmacsConfig)
