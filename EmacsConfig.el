@@ -135,10 +135,6 @@ Version 2017-09-01"
     (add-hook 'haskell-mode-hook 'company-mode)
     (add-hook 'haskell-interactive-mode-hook 'company-mode)))
 
-(use-package powerline :ensure t
-  :config
-  (powerline-default-theme))
-
 (use-package projectile :ensure t
   :config
   (progn
