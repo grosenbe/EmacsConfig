@@ -105,6 +105,8 @@ Version 2017-09-01"
 (require 'use-package)
 (use-package htmlize :ensure t)
 
+(use-package dad-joke :ensure t)
+
 (use-package org-bullets :ensure t
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
@@ -165,8 +167,6 @@ Version 2017-09-01"
 (remove-hook 'find-file-hook 'p4-update-status)
 (add-hook 'find-file-hooks 'p4-tramp-workaround-find-file-hook)
 
-(use-package omnisharp :ensure t)
-
 (use-package tide :ensure t)
 (defun setup-tide-mode ()
   (interactive)
@@ -226,23 +226,13 @@ Version 2017-09-01"
         (message "ran clang format")))
     (add-hook 'before-save-hook 'clang-format-buffer-smart)))
 
-(eval-after-load
-    'company
-  '(add-to-list 'company-backends 'company-omnisharp))
 (add-hook 'csharp-mode-hook #'company-mode)
-(add-hook 'csharp-mode-hook 'omnisharp-mode)
 
-(use-package yasnippet
-  :ensure t
-  )
-
-;; Note the use of background-index below requires installation of a *local* clangd with version >=
-;; 8.0. For kicks, I have compiled LLVM from source on grosenberg-lx, because there isn't a way to
-;; use yum/dnf to install a recent version of clangd on Cent 7.
 (use-package lsp-mode
   :ensure t
   :config
   (add-hook 'c++-mode-hook #'lsp)
+  (add-hook 'csharp-mode-hook #'lsp)
   (setq lsp-clients-clangd-args '("-j=8" "-background-index" "-log=verbose"))
   )
 
@@ -270,14 +260,14 @@ Version 2017-09-01"
   :after treemacs projectile
   :ensure t)
 
-(if (file-exists-p "~/.emacs.d/lisp/tableau-data-mode.el")
-    ((require 'tableau-data-mode)
-     (require 'tableau-template-mode)
-     (setq auto-mode-alist
-           (append '(
-                     ("\\.data$"  . tableau-data-mode)
-                     ("\\.schema$"  . tableau-data-mode)
-                     ("\\.template$"  . tableau-template-mode))
-                   auto-mode-alist))))
+(when (file-exists-p "~/.emacs.d/lisp/tableau-data-mode.el")
+  (require 'tableau-data-mode)
+  (require 'tableau-template-mode)
+  (setq auto-mode-alist
+        (append '(
+                  ("\\.data$"  . tableau-data-mode)
+                  ("\\.schema$"  . tableau-data-mode)
+                  ("\\.template$"  . tableau-template-mode))
+                auto-mode-alist)))
 
 (provide 'EmacsConfig)
