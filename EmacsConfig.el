@@ -25,7 +25,8 @@ If `universal-argument' is called first, copy only the dir path.
 
 If in dired, copy the file/dir cursor is on, or marked files.
 
-If a buffer is not file and not dired, copy value of `default-directory' (which is usually the “current” dir when that buffer was created)
+If a buffer is not file and not dired, copy value of `default-directory' (which is usually the
+“current” dir when that buffer was created)
 
 URL `http://ergoemacs.org/emacs/emacs_copy_file_path.html'
 Version 2017-09-01"
@@ -101,6 +102,9 @@ Version 2017-09-01"
   (when (eq major-mode 'compilation-mode)
     (ansi-color-apply-on-region compilation-filter-start (point-max))))
 (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+
+(require 'package)
+(package-initialize)
 
 (require 'use-package)
 (use-package htmlize :ensure t)
