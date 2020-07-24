@@ -17,6 +17,7 @@
       dired-listing-switches "-ahl")
 (menu-bar-mode -1)
 (tool-bar-mode -1)
+(scroll-bar-mode -1)
 
 (defun cgr-copy-file-path (&optional @dir-path-only-p)
   "Copy the current buffer's file path or dired path to `kill-ring'.
@@ -63,12 +64,21 @@ Version 2017-09-01"
 (setq tex-start-commands "")
 (setq sentence-end-double-space nil)
 
-(cond ((>= emacs-major-version 25)
-       (require 'package)
-       (add-to-list 'package-archives
-                    '("melpa" . "https://melpa.org/packages/") t)
-       (add-to-list 'package-archives
-                    '("org" . "https://orgmode.org/elpa/") t)))
+(require 'package)
+(setq package-enable-at-startup nil)
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives
+             '("org" . "https://orgmode.org/elpa/") t)
+(package-initialize)
+
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(eval-when-compile
+  (require 'use-package))
+(require 'bind-key)                ;; if you use any :bind variant
 
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
@@ -103,10 +113,8 @@ Version 2017-09-01"
     (ansi-color-apply-on-region compilation-filter-start (point-max))))
 (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
 
-(require 'package)
-(package-initialize)
+(use-package multiple-cursors :ensure t)
 
-(require 'use-package)
 (use-package htmlize :ensure t)
 
 (use-package dad-joke :ensure t)
