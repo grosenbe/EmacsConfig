@@ -28,10 +28,6 @@
 (setq gnus-demon-timestep 60)
 (gnus-demon-add-handler 'gnus-demon-scan-news 2 t)
 
-(require 'gnus-notify)
-(require 'gnus-desktop-notify)
-(gnus-desktop-notify-mode)
-
 (setq gnus-extra-headers
       '(To Newsgroups))
 (setq gnus-ignored-from-addresses "geoff.rosenberg@gmail.com")
@@ -50,8 +46,6 @@
 
 (setq message-cite-style message-cite-style-gmail)
 
-;; flyspell for new messages
-
 (require 'bbdb)
 (bbdb-initialize 'message 'gnus 'sendmail)
 (add-hook 'gnus-startup-hook 'bbdb-initialize)
@@ -66,7 +60,7 @@
 	     (local-set-key (kbd "TAB") 'bbdb-complete-mail)))
 (setq bbdb-complete-mail-allow-cycling t)
 
-(setq mm-text-html-renderer 'shr)
+(setq mm-text-html-renderer 'gnus-w3m)
 
  ;; Signature
 (setq gnus-posting-styles '((".*" (signature "Geoff Rosenberg"))))
