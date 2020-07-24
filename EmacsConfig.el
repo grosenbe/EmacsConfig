@@ -251,7 +251,8 @@ Version 2017-09-01"
       (progn
         (setq lsp-clients-clangd-executable "/home/tsi/grosenberg/tableau-cache/devtools/clang/7.0.4/bin/clangd")
         (setq lsp-clients-clangd-args '("-j=8" "-log=verbose")))
-  (setq lsp-clients-clangd-args '("-j=8" "-background-index" "-log=verbose"))
+    (setq lsp-clients-clangd-args '("-j=8" "-background-index" "-log=verbose"))
+    )
   )
 
 (use-package lsp-java
