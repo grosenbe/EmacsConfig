@@ -233,6 +233,12 @@ Version 2017-09-01"
   :config
   (add-hook 'c++-mode-hook #'lsp)
   (add-hook 'csharp-mode-hook #'lsp)
+  (setq lsp-keymap-prefix "C-c l")
+  (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
+  (if (string= system-name "grosenberg-lx.tsi.lan")
+      (progn
+        (setq lsp-clients-clangd-executable "/home/tsi/grosenberg/tableau-cache/devtools/clang/7.0.4/bin/clangd")
+        (setq lsp-clients-clangd-args '("-j=8" "-log=verbose")))
   (setq lsp-clients-clangd-args '("-j=8" "-background-index" "-log=verbose"))
   )
 
