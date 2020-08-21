@@ -129,6 +129,8 @@ Version 2017-09-01"
 (use-package idle-highlight-mode :ensure t
   :config (idle-highlight-mode))
 
+(use-package realgud-lldb :ensure t)
+
 (use-package company :ensure t
   :config
   (progn
@@ -247,12 +249,7 @@ Version 2017-09-01"
   (add-hook 'csharp-mode-hook #'lsp)
   (setq lsp-keymap-prefix "C-c l")
   (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
-  (if (string= system-name "grosenberg-lx.tsi.lan")
-      (progn
-        (setq lsp-clients-clangd-executable "/home/tsi/grosenberg/tableau-cache/devtools/clang/7.0.4/bin/clangd")
-        (setq lsp-clients-clangd-args '("-j=8" "-log=verbose")))
-    (setq lsp-clients-clangd-args '("-j=8" "-background-index" "-log=verbose"))
-    )
+  (setq lsp-clients-clangd-args '("-j=8" "-background-index" "-log=verbose" "-cross-file-rename"))
   )
 
 (use-package lsp-java
