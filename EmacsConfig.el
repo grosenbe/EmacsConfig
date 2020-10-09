@@ -19,6 +19,13 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 
+(defun server-shutdown ()
+  "Save buffers, quit, and kill server"
+  (interactive)
+  (save-some-buffers)
+  (kill-emacs)
+  )
+
 (defun cgr-copy-file-path (&optional @dir-path-only-p)
   "Copy the current buffer's file path or dired path to `kill-ring'.
 Result is full path.
@@ -236,9 +243,10 @@ Version 2017-09-01"
       (when (and (or (eq major-mode 'c++-mode)
                      (eq major-mode 'c-mode))
                  (file-exists-p (expand-file-name ".clang-format" (projectile-project-root))))
-        (clang-format-buffer)
-        (message "ran clang format")))
-    (add-hook 'before-save-hook 'clang-format-buffer-smart)))
+        (clang-format-buffer)))
+    (add-hook 'before-save-hook 'clang-format-buffer-smart)
+    (if (file-directory-p "~/tableau-cache")
+        (setq clang-format-executable "~/tableau-cache/devtools/clang/7.0.4/bin/clang-format"))))
 
 (add-hook 'csharp-mode-hook #'company-mode)
 
@@ -249,7 +257,7 @@ Version 2017-09-01"
   (add-hook 'csharp-mode-hook #'lsp)
   (setq lsp-keymap-prefix "C-c l")
   (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
-  (setq lsp-clients-clangd-args '("-j=8" "-background-index" "-log=verbose" "-cross-file-rename"))
+  (setq lsp-clients-clangd-args '("-j=8" "-background-index" "-cross-file-rename"))
   )
 
 (use-package lsp-java
