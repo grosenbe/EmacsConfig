@@ -120,6 +120,14 @@ Version 2017-09-01"
     (ansi-color-apply-on-region compilation-filter-start (point-max))))
 (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
 
+(use-package eterm-256color :ensure t
+  :hook (term-mode . eterm-256color-mode))
+
+(use-package vterm :ensure t
+  :commands vterm
+  :config
+  (setq term-max-scrollback 10000))
+
 (use-package multiple-cursors :ensure t)
 
 (use-package htmlize :ensure t)
