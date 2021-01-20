@@ -71,7 +71,7 @@ Version 2017-09-01"
 (setq tex-start-commands "")
 (setq sentence-end-double-space nil)
 
-(require 'package)
+(require 'package)                      ; test comment
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/") t)
