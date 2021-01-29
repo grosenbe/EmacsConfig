@@ -46,7 +46,9 @@
 
 (setq message-cite-style message-cite-style-gmail)
 
-(require 'bbdb)
+(use-package bbdb
+  :ensure t)
+
 (bbdb-initialize 'message 'gnus 'sendmail)
 (add-hook 'gnus-startup-hook 'bbdb-initialize)
 (bbdb-mua-auto-update-init 'message)

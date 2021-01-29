@@ -291,7 +291,7 @@ Version 2017-09-01"
   (doom-modeline-mode)
   (setq doom-modeline-height 15)))
 
-(use-package rainbow-delimiters-mode
+(use-package rainbow-delimiters
   :ensure t
   :hook (prog-mode . rainbow-delimiters-mode))
 
