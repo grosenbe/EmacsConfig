@@ -73,15 +73,15 @@ Version 2017-09-01"
 (setq sentence-end-double-space nil)
 
 (require 'package)
-(setq package-enable-at-startup nil)
-(add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/") t)
-(add-to-list 'package-archives
-             '("org" . "https://orgmode.org/elpa/") t)
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                         ("org" . "https://orgmode.org/elpa/")
+                         ("elpa" . "https://elpa.gnu.org/packages/")))
+
 (package-initialize)
+(unless package-archive-contents
+  (package-refresh-contents))
 
 (unless (package-installed-p 'use-package)
-  (package-refresh-contents)
   (package-install 'use-package))
 
 (eval-when-compile
@@ -272,6 +272,17 @@ Version 2017-09-01"
 (use-package treemacs-projectile
   :after treemacs projectile
   :ensure t)
+
+(use-package doom-modeline
+  :ensure t
+  :config
+  (progn
+  (doom-modeline-mode)
+  (setq doom-modeline-height 15)))
+
+(use-package rainbow-delimiters
+  :ensure t
+  :hook (prog-mode . rainbow-delimiters-mode))
 
 (when (file-exists-p "~/.emacs.d/lisp/tableau-data-mode.el")
   (require 'tableau-data-mode)
