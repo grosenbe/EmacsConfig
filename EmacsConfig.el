@@ -11,6 +11,7 @@
 (global-set-key (kbd "C-c m c") 'mc/edit-lines)
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 (global-set-key (kbd "C-c C-f") 'recompile)
+(global-set-key (kbd "C-c t") 'whitespace-mode)
 
 (setq-default indent-tabs-mode nil)
 (setq column-number-mode t
@@ -161,7 +162,6 @@ Version 2017-09-01"
 (use-package projectile :ensure t
   :config
   (progn
-    (projectile-global-mode)
     (defun set-gopath-smart ()
       "Reset GOPATH if a vendor dir exists in the project root"
       (let ((vendor-dir (expand-file-name "vendor" (projectile-project-root))))
@@ -187,24 +187,11 @@ Version 2017-09-01"
 ;; we replace it with a wrapper that filters out remote buffers.
 (remove-hook 'find-file-hook 'p4-update-status)
 (add-hook 'find-file-hooks 'p4-tramp-workaround-find-file-hook)
-
-(use-package tide :ensure t)
-(defun setup-tide-mode ()
-  (interactive)
-  (tide-setup)
-  (flycheck-mode +1)
-  (setq flycheck-check-syntax-automatically '(save mode-enabled))
-  (eldoc-mode +1)
-  (tide-hl-identifier-mode +1)
-  (company-mode +1))
+(add-hook 'p4-form-mode-hook
+          (lambda () (flyspell-mode 1)))
 
 ;; aligns annotation to the right hand side
 (setq company-tooltip-align-annotations t)
-
-;; formats the buffer before saving
-(add-hook 'before-save-hook 'tide-format-before-save)
-
-(add-hook 'typescript-mode-hook #'setup-tide-mode)
 
 (use-package counsel :ensure t
   :diminish (ivy-mode . "")
@@ -253,11 +240,13 @@ Version 2017-09-01"
 (use-package lsp-mode
   :ensure t
   :config
+  (add-hook 'typescript-mode-hook #'lsp)
   (add-hook 'c++-mode-hook #'lsp)
   (add-hook 'csharp-mode-hook #'lsp)
   (setq lsp-keymap-prefix "C-c l")
   (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
   (setq lsp-clients-clangd-args '("-j=8" "-background-index" "-cross-file-rename"))
+  (setq lsp-csharp-server-path '"~/dev/omnisharp-roslyn/artifacts/scripts/OmniSharp.Stdio")
   )
 
 (use-package lsp-java
