@@ -1,21 +1,26 @@
-(setq user-mail-address "geoff.rosenberg@gmail.com"
+(setq user-mail-address "geoff@cgrosenberg.com"
       user-full-name "Geoff Rosenberg")
 
 (gnus-add-configuration '(article (horizontal 1.0 (summary .25 point) (article 1.0))))
 
-(setq gnus-select-method
-      '(nnimap "gmail"
+(setq gnus-select-method '(nnnil "")
+ gnus-secondary-select-methods
+      '(
+        (nnimap "TheBox"
+                (nnimap-address "mail.cgrosenberg.com")
+                (nnimap-server-port 993)
+                (nnimap-stream ssl))
+        (nnimap "gmail"
 	       (nnimap-address "imap.gmail.com")
 	       (nnimap-server-port 993)
 	       (nnimap-stream ssl)
 	       (nnmail-expiry-target "nnimap+gmail:[Gmail]/Trash")
-	       (nnmail-expiry-wait immediate)))
+	       (nnmail-expiry-wait immediate))
+        ))
 
-(setq smtpmail-smtp-server "smtp.gmail.com"
+(setq smtpmail-smtp-server "mail.cgrosenberg.com"
       smtpmail-smtp-service 587
-      gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")
-
-(setq gnus-agent nil
+      gnus-agent nil
       gnus-use-dribble-file nil
       gnus-message-archive-method nil)
 
@@ -25,20 +30,18 @@
       '((not gnus-thread-sort-by-date)
       gnus-thread-sort-by-number))
 
-(setq gnus-demon-timestep 60)
 (gnus-demon-add-handler 'gnus-demon-scan-news 2 t)
 
-(setq gnus-extra-headers
-      '(To Newsgroups))
-(setq gnus-ignored-from-addresses "geoff.rosenberg@gmail.com")
 (setq gnus-summary-line-format "%U%R %*%-20f %B %&user-date; %s\n"
+      gnus-ignored-from-addresses "geoff.*rosenberg.*"
+      gnus-demon-timestep 60
       gnus-sum-thread-tree-false-root ""
       gnus-sum-thread-tree-indent " "
       gnus-sum-thread-tree-leaf-with-other "├► "
       gnus-sum-thread-tree-root ""
       gnus-sum-thread-tree-single-leaf "╰► "
-      gnus-sum-thread-tree-vertical "│")
-(setq gnus-user-date-format-alist
+      gnus-sum-thread-tree-vertical "│"
+      gnus-user-date-format-alist
       '(((gnus-seconds-today) . "Today, %H:%M")
 	((+ 86400 (gnus-seconds-today)) . "Yesterday, %H:%M")
 	(604800 . "%A %H:%M")

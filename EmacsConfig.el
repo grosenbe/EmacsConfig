@@ -4,7 +4,7 @@
 ;; convenience stuff
 (global-set-key (kbd "<C-tab>") 'other-window)
 (delete-selection-mode 1)
-(show-paren-mode 1)			;highlight matching parenthesis
+(show-paren-mode 1)
 (global-set-key (kbd "C-c b") 'blink-matching-open)
 (display-time-mode 1)
 (global-set-key (kbd "C-c w") 'toggle-truncate-lines)
@@ -294,6 +294,9 @@ Version 2017-09-01"
 (use-package rainbow-delimiters
   :ensure t
   :hook (prog-mode . rainbow-delimiters-mode))
+
+(use-package magit
+  :ensure t)
 
 (when (file-exists-p "~/.emacs.d/lisp/tableau-data-mode.el")
   (require 'tableau-data-mode)
