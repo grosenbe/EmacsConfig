@@ -24,8 +24,7 @@
   "Save buffers, quit, and kill server"
   (interactive)
   (save-some-buffers)
-  (kill-emacs)
-  )
+  (kill-emacs))
 
 (defun cgr-copy-file-path (&optional @dir-path-only-p)
   "Copy the current buffer's file path or dired path to `kill-ring'.
@@ -84,8 +83,9 @@ Version 2017-09-01"
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
 
-(eval-when-compile
-  (require 'use-package))
+(require 'use-package)
+(setq use-package-always-ensure t)
+
 (require 'bind-key)                ;; if you use any :bind variant
 
 (global-set-key (kbd "C-c a") 'org-agenda)
@@ -121,45 +121,49 @@ Version 2017-09-01"
     (ansi-color-apply-on-region compilation-filter-start (point-max))))
 (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
 
-(use-package multiple-cursors :ensure t)
+(use-package multiple-cursors)
 
-(use-package htmlize :ensure t)
+(use-package htmlize)
 
-(use-package dad-joke :ensure t)
+(use-package dad-joke)
 
-(use-package org-bullets :ensure t
+(use-package org-bullets
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
-(use-package gruvbox-theme :ensure t
-  :config (load-theme 'gruvbox-dark-hard t))
+(use-package gruvbox-theme
+  :config
+  (load-theme 'gruvbox-dark-hard t))
 
-(use-package idle-highlight-mode :ensure t
-  :config (idle-highlight-mode))
+(use-package idle-highlight-mode
+  :config
+  (idle-highlight-mode))
 
-(use-package realgud-lldb :ensure t)
+(use-package realgud-lldb)
 
-(use-package company :ensure t
+(use-package company
   :config
   (progn
-    (setq company-minimum-prefix-length 2
+    (setq company-minimum-prefix-length 1
+          company-idle-delay 0.0
           company-selection-wrap-around t
           company-show-numbers t
           company-tooltip-align-annotations t
           company-require-match nil
           company-transformers '(company-sort-by-occurrence)
           company-idle-delay 0.1
-          company-dabbrev-downcase nil)
+          company-dabbrev-downcase nil
+          company-minimum-prefix-length )
     (global-company-mode)))
 
-(use-package company-ghci :ensure t
+(use-package company-ghci
   :config
   (progn
     (push 'company-ghci company-backends)
     (add-hook 'haskell-mode-hook 'company-mode)
     (add-hook 'haskell-interactive-mode-hook 'company-mode)))
 
-(use-package projectile :ensure t
+(use-package projectile
   :config
   (progn
     (defun set-gopath-smart ()
@@ -176,7 +180,7 @@ Version 2017-09-01"
    ("C-c p t" . projectile-find-tag)
    ("C-c p g" . projectile-grep)))
 
-(use-package p4 :ensure t)
+(use-package p4 )
 (defun p4-tramp-workaround-find-file-hook ()
   "do not let p4.el process remote TRAMP buffers"
   (when
@@ -193,7 +197,7 @@ Version 2017-09-01"
 ;; aligns annotation to the right hand side
 (setq company-tooltip-align-annotations t)
 
-(use-package counsel :ensure t
+(use-package counsel
   :diminish (ivy-mode . "")
   :bind
   (("M-y" . counsel-yank-pop)
@@ -218,11 +222,9 @@ Version 2017-09-01"
   (setq ivy-virtual-abbreviate 'full))   ;Show the full virtual file paths
 
 (use-package markdown-mode
-  :ensure t
   :mode ("\\.text\\'" "\\.markdown\\'" "\\.md\\'"))
 
 (use-package clang-format
-  :ensure t
   :config
   (progn
     (defun clang-format-buffer-smart ()
@@ -238,54 +240,50 @@ Version 2017-09-01"
 (add-hook 'csharp-mode-hook #'company-mode)
 
 (use-package lsp-mode
-  :ensure t
   :config
   (add-hook 'typescript-mode-hook #'lsp)
   (add-hook 'c++-mode-hook #'lsp)
   (add-hook 'csharp-mode-hook #'lsp)
+  (lsp-enable-which-key-integration t)
   (setq lsp-keymap-prefix "C-c l")
   (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
   (setq lsp-clients-clangd-args '("-j=8" "-background-index" "-cross-file-rename"))
-  (setq lsp-csharp-server-path '"~/dev/omnisharp-roslyn/artifacts/scripts/OmniSharp.Stdio")
-  )
+  (setq lsp-csharp-server-path '"~/dev/omnisharp-roslyn/artifacts/scripts/OmniSharp.Stdio"))
 
 (use-package lsp-java
-  :ensure t)
-(add-hook 'java-mode-hook #'lsp)
+  :config
+  (add-hook 'java-mode-hook #'lsp))
 
-(use-package lsp-ui
-  :ensure t)
+(use-package lsp-ui)
 
 (use-package company-lsp
-  :ensure t
   :config
   (progn
-    (push 'company-ghci company-backends)
-    ))
+    (push 'company-ghci company-backends)))
 
-(use-package treemacs
-  :ensure t)
+(use-package treemacs)
 
-(use-package lsp-treemacs
-  :ensure t)
+(use-package lsp-treemacs)
 
 (use-package treemacs-projectile
-  :after treemacs projectile
-  :ensure t)
+  :after treemacs projectile)
 
 (use-package doom-modeline
-  :ensure t
   :config
   (progn
   (doom-modeline-mode)
   (setq doom-modeline-height 15)))
 
 (use-package rainbow-delimiters
-  :ensure t
   :hook (prog-mode . rainbow-delimiters-mode))
 
-(use-package magit
-  :ensure t)
+(use-package magit)
+
+(use-package which-key
+  :init (which-key-mode)
+  :diminish which-key-mode
+  :config
+  (setq which-key-idle-delay 1))
 
 (when (file-exists-p "~/.emacs.d/lisp/tableau-data-mode.el")
   (require 'tableau-data-mode)
