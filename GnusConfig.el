@@ -22,9 +22,9 @@
       smtpmail-smtp-service 587
       gnus-agent nil
       gnus-use-dribble-file nil
-      gnus-message-archive-method nil)
+      gnus-message-archive-group '((".*" "nnimap+TheBox:Sent")))
 
-(add-hook 'message-setup-hook 'mml-secure-message-encrypt)
+(add-hook 'message-setup-hook 'mml-secure-message-sign)
 
 (setq gnus-thread-sort-functions
       '((not gnus-thread-sort-by-date)
