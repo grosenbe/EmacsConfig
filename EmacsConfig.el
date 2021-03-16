@@ -285,6 +285,8 @@ Version 2017-09-01"
   :config
   (setq which-key-idle-delay 1))
 
+(use-package rust-mode)
+
 (when (file-exists-p "~/.emacs.d/lisp/tableau-data-mode.el")
   (require 'tableau-data-mode)
   (require 'tableau-template-mode)
