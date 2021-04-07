@@ -64,6 +64,7 @@ Version 2017-09-01"
 (setq recentf-max-menu-items 25)
 (setq recentf-exclude '("/org/"))
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
+(run-at-time nil (* 5 60) 'recentf-save-list)
 
 (setq-default fill-column 100)
 (setq org-latex-compiler "xelatex")
@@ -248,7 +249,13 @@ Version 2017-09-01"
   (setq lsp-keymap-prefix "C-c l")
   (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
   (setq lsp-clients-clangd-args '("-j=8" "-background-index" "-cross-file-rename"))
-  (setq lsp-csharp-server-path '"~/dev/omnisharp-roslyn/artifacts/scripts/OmniSharp.Stdio"))
+  (setq lsp-csharp-server-path '"~/dev/omnisharp-roslyn/artifacts/scripts/OmniSharp.Stdio")
+  (lsp-register-client
+     (make-lsp-client :new-connection (lsp-tramp-connection
+				       "clangd")
+                      :major-modes '(c-mode c++-mode)
+                      :remote? t
+                      :server-id 'clangd-remote)))
 
 (use-package lsp-java
   :config
@@ -264,6 +271,8 @@ Version 2017-09-01"
 (use-package treemacs)
 
 (use-package lsp-treemacs)
+
+(use-package cmake-mode)
 
 (use-package treemacs-projectile
   :after treemacs projectile)
