@@ -153,8 +153,7 @@ Version 2017-09-01"
           company-require-match nil
           company-transformers '(company-sort-by-occurrence)
           company-idle-delay 0.1
-          company-dabbrev-downcase nil
-          company-minimum-prefix-length )
+          company-dabbrev-downcase nil)
     (global-company-mode)))
 
 (use-package company-ghci
@@ -185,7 +184,8 @@ Version 2017-09-01"
 (defun p4-tramp-workaround-find-file-hook ()
   "do not let p4.el process remote TRAMP buffers"
   (when
-      (and (fboundp 'tramp-tramp-file-p)
+      (and (executable-find "p4")
+           (fboundp 'tramp-tramp-file-p)
            (not (tramp-tramp-file-p buffer-file-name)))
     (p4-update-status)))
 ;; p4.el adds p4-update-status to find-file-hook
@@ -238,9 +238,18 @@ Version 2017-09-01"
     (if (file-directory-p "~/tableau-cache")
         (setq clang-format-executable "~/tableau-cache/devtools/clang/7.0.4/bin/clang-format"))))
 
-(add-hook 'csharp-mode-hook #'company-mode)
+(use-package tree-sitter)
+(use-package tree-sitter-langs)
+(use-package csharp-mode
+  :after company tree-sitter tree-sitter-langs
+  :config
+  (add-to-list 'auto-mode-alist '("\\.cs\\'" . csharp-tree-sitter-mode))
+  (add-hook 'csharp-mode-hook #'company-mode))
+
+(use-package which-key)
 
 (use-package lsp-mode
+  :after (which-key)
   :config
   (add-hook 'typescript-mode-hook #'lsp)
   (add-hook 'c++-mode-hook #'lsp)
