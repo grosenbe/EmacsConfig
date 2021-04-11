@@ -261,7 +261,7 @@ Version 2017-09-01"
   (setq lsp-csharp-server-path '"~/dev/omnisharp-roslyn/artifacts/scripts/OmniSharp.Stdio")
   (lsp-register-client
      (make-lsp-client :new-connection (lsp-tramp-connection
-				       "clangd")
+				       '("clangd" "-j=8" "-background-index" "-cross-file-rename"))
                       :major-modes '(c-mode c++-mode)
                       :remote? t
                       :server-id 'clangd-remote)))
