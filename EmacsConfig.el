@@ -128,6 +128,8 @@ Version 2017-09-01"
 
 (use-package dad-joke)
 
+(use-package vterm)
+
 (use-package org-bullets
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
@@ -250,13 +252,15 @@ Version 2017-09-01"
 
 (use-package lsp-mode
   :after (which-key)
+  :hook (lsp-mode . (lambda()
+                      (let ((lsp-keymap-prefix "C-c l"))
+                        (lsp-enable-which-key-integration))))
+  :init (setq lsp-keymap-prefix "C-c l")
   :config
+  (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
   (add-hook 'typescript-mode-hook #'lsp)
   (add-hook 'c++-mode-hook #'lsp)
   (add-hook 'csharp-mode-hook #'lsp)
-  (lsp-enable-which-key-integration t)
-  (setq lsp-keymap-prefix "C-c l")
-  (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
   (setq lsp-clients-clangd-args '("-j=8" "-background-index" "-cross-file-rename"))
   (setq lsp-csharp-server-path '"~/dev/omnisharp-roslyn/artifacts/scripts/OmniSharp.Stdio")
   (lsp-register-client

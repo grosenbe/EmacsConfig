@@ -24,8 +24,6 @@
       gnus-use-dribble-file nil
       gnus-message-archive-group '((".*" "nnimap+TheBox:Sent")))
 
-(add-hook 'message-setup-hook 'mml-secure-message-sign)
-
 (setq gnus-thread-sort-functions
       '((not gnus-thread-sort-by-date)
       gnus-thread-sort-by-number))
