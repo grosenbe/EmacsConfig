@@ -12,6 +12,7 @@
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 (global-set-key (kbd "C-c C-f") 'recompile)
 (global-set-key (kbd "C-c t") 'whitespace-mode)
+(global-set-key (kbd "C-c d") 'display-line-numbers-mode)
 
 (setq-default indent-tabs-mode nil)
 (setq column-number-mode t
@@ -121,6 +122,8 @@ Version 2017-09-01"
   (when (eq major-mode 'compilation-mode)
     (ansi-color-apply-on-region compilation-filter-start (point-max))))
 (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+
+(use-package vterm)
 
 (use-package multiple-cursors)
 
@@ -240,27 +243,31 @@ Version 2017-09-01"
     (if (file-directory-p "~/tableau-cache")
         (setq clang-format-executable "~/tableau-cache/devtools/clang/7.0.4/bin/clang-format"))))
 
-(use-package tree-sitter)
-(use-package tree-sitter-langs)
 (use-package csharp-mode
-  :after company tree-sitter tree-sitter-langs
+  :after company
   :config
-  (add-to-list 'auto-mode-alist '("\\.cs\\'" . csharp-tree-sitter-mode))
+  ;; (add-to-list 'auto-mode-alist '("\\.cs\\'" . csharp-tree-sitter-mode))
   (add-hook 'csharp-mode-hook #'company-mode))
 
 (use-package which-key)
 
-(use-package lsp-mode
-  :after (which-key)
-  :hook (lsp-mode . (lambda()
-                      (let ((lsp-keymap-prefix "C-c l"))
-                        (lsp-enable-which-key-integration))))
-  :init (setq lsp-keymap-prefix "C-c l")
+(use-package flycheck)
+
+(use-package typescript-mode)
+
+(use-package editorconfig
   :config
-  (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
-  (add-hook 'typescript-mode-hook #'lsp)
-  (add-hook 'c++-mode-hook #'lsp)
-  (add-hook 'csharp-mode-hook #'lsp)
+  (editorconfig-mode 1))
+
+(use-package lsp-mode
+  :after (which-key flycheck)
+  :init
+  (setq lsp-keymap-prefix "C-c l")
+  :hook ((c++-mode . lsp)
+         (typescript-mode . lsp)
+         (csharp-mode . lsp)
+         (lsp-mode . lsp-enable-which-key-integration))
+  :config
   (setq lsp-clients-clangd-args '("-j=8" "-background-index" "-cross-file-rename"))
   (setq lsp-csharp-server-path '"~/dev/omnisharp-roslyn/artifacts/scripts/OmniSharp.Stdio")
   (lsp-register-client
