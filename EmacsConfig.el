@@ -177,7 +177,8 @@ Version 2017-09-01"
         (when (file-exists-p vendor-dir)
           (setenv "GOPATH" (concat vendor-dir path-separator (getenv "GOPATH"))))))
     (add-hook 'projectile-after-switch-project-hook 'set-gopath-smart)
-    (setq projectile-completion-system 'ivy))
+    (setq projectile-completion-system 'ivy)
+    (setq projectile-globally-ignored-file-suffixes '("idx")))
   :bind
   (("C-c p h" . projectile-find-file)
    ("C-c p o" . projectile-find-other-file-other-window)
