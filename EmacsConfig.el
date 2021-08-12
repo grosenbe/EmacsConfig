@@ -145,8 +145,6 @@ Version 2017-09-01"
   :config
   (idle-highlight-mode))
 
-(use-package realgud-lldb)
-
 (use-package company
   :config
   (progn
@@ -177,7 +175,11 @@ Version 2017-09-01"
         (when (file-exists-p vendor-dir)
           (setenv "GOPATH" (concat vendor-dir path-separator (getenv "GOPATH"))))))
     (add-hook 'projectile-after-switch-project-hook 'set-gopath-smart)
-    (setq projectile-completion-system 'ivy))
+    (setq projectile-auto-discover nil
+          projectile-completion-system 'ivy
+          projectile-generic-command
+          "find . -type f ! -ipath '.git*' ! -ipath '*/.git*' ! -ipath '*/build/*' ! -ipath '*/.cache/*' ! -name '*~' -print0")
+    (projectile-mode))
   :bind
   (("C-c p h" . projectile-find-file)
    ("C-c p o" . projectile-find-other-file-other-window)
@@ -249,7 +251,11 @@ Version 2017-09-01"
   ;; (add-to-list 'auto-mode-alist '("\\.cs\\'" . csharp-tree-sitter-mode))
   (add-hook 'csharp-mode-hook #'company-mode))
 
-(use-package which-key)
+(use-package which-key
+  :init (which-key-mode)
+  :diminish which-key-mode
+  :config
+  (setq which-key-idle-delay 1))
 
 (use-package flycheck)
 
@@ -263,30 +269,26 @@ Version 2017-09-01"
   :after (which-key flycheck)
   :init
   (setq lsp-keymap-prefix "C-c l")
-  :hook ((c++-mode . lsp)
-         (typescript-mode . lsp)
-         (csharp-mode . lsp)
-         (lsp-mode . lsp-enable-which-key-integration))
+  :hook ((lsp-mode . lsp-enable-which-key-integration))
   :config
-  (setq lsp-clients-clangd-args '("-j=8" "-background-index" "-cross-file-rename"))
-  (setq lsp-csharp-server-path '"~/dev/omnisharp-roslyn/artifacts/scripts/OmniSharp.Stdio")
+  (setq lsp-clients-clangd-args '("-j=16" "-background-index" "-cross-file-rename" "-clang-tidy")
+        lsp-csharp-server-path '"~/dev/omnisharp-roslyn/artifacts/scripts/OmniSharp.Stdio"
+        lsp-enable-snippet nil)
   (lsp-register-client
-     (make-lsp-client :new-connection (lsp-tramp-connection
-				       '("clangd" "-j=8" "-background-index" "-cross-file-rename"))
-                      :major-modes '(c-mode c++-mode)
-                      :remote? t
-                      :server-id 'clangd-remote)))
+   (make-lsp-client :new-connection (lsp-tramp-connection
+				     '("clangd" "-j=16" "-background-index" "-cross-file-rename"))
+                    :major-modes '(c-mode c++-mode)
+                    :remote? t
+                    :server-id 'clangd-remote)))
 
 (use-package lsp-java
   :config
   (add-hook 'java-mode-hook #'lsp))
 
-(use-package lsp-ui)
-
-(use-package company-lsp
+(use-package lsp-ui
+  :after (lsp-mode)
   :config
-  (progn
-    (push 'company-ghci company-backends)))
+  (setq lsp-eldoc-enable-hover nil))
 
 (use-package treemacs)
 
@@ -307,12 +309,6 @@ Version 2017-09-01"
   :hook (prog-mode . rainbow-delimiters-mode))
 
 (use-package magit)
-
-(use-package which-key
-  :init (which-key-mode)
-  :diminish which-key-mode
-  :config
-  (setq which-key-idle-delay 1))
 
 (use-package rust-mode)
 
