@@ -176,8 +176,10 @@ Version 2017-09-01"
         (when (file-exists-p vendor-dir)
           (setenv "GOPATH" (concat vendor-dir path-separator (getenv "GOPATH"))))))
     (add-hook 'projectile-after-switch-project-hook 'set-gopath-smart)
+
     (setq projectile-auto-discover nil
           projectile-completion-system 'ivy
+          projectile-globally-ignored-file-suffixes '("idx")
           projectile-generic-command
           "find . -type f ! -ipath '.git*' ! -ipath '*/.git*' ! -ipath '*/build/*' ! -ipath '*/.cache/*' ! -name '*~' -print0")
     (projectile-mode))
