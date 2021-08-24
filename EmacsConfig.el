@@ -123,8 +123,6 @@ Version 2017-09-01"
     (ansi-color-apply-on-region compilation-filter-start (point-max))))
 (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
 
-(use-package vterm)
-
 (use-package multiple-cursors)
 
 (use-package htmlize)
@@ -187,7 +185,7 @@ Version 2017-09-01"
    ("C-c p t" . projectile-find-tag)
    ("C-c p g" . projectile-grep)))
 
-(use-package p4 )
+(use-package p4)
 (defun p4-tramp-workaround-find-file-hook ()
   "do not let p4.el process remote TRAMP buffers"
   (when
