@@ -15,16 +15,14 @@
 	       (nnimap-server-port 993)
 	       (nnimap-stream ssl)
 	       (nnmail-expiry-target "nnimap+gmail:[Gmail]/Trash")
-	       (nnmail-expiry-wait immediate))
-        ))
+	       (nnmail-expiry-wait immediate))))
 
 (setq smtpmail-smtp-server "mail.cgrosenberg.com"
       smtpmail-smtp-service 587
       gnus-agent nil
       gnus-use-dribble-file nil
-      gnus-message-archive-group '((".*" "nnimap+TheBox:Sent")))
-
-(setq gnus-thread-sort-functions
+      gnus-message-archive-group '((".*" "nnimap+TheBox:Sent"))
+      gnus-thread-sort-functions
       '((not gnus-thread-sort-by-date)
       gnus-thread-sort-by-number))
 
@@ -43,9 +41,8 @@
       '(((gnus-seconds-today) . "Today, %H:%M")
 	((+ 86400 (gnus-seconds-today)) . "Yesterday, %H:%M")
 	(604800 . "%A %H:%M")
-	(t . "%Y-%m-%d %H:%M")))
-
-(setq message-cite-style message-cite-style-gmail)
+	(t . "%Y-%m-%d %H:%M"))
+      message-cite-style message-cite-style-gmail)
 
 (use-package bbdb
   :ensure t)
@@ -55,15 +52,14 @@
 (bbdb-mua-auto-update-init 'message)
 (setq bbdb-mua-auto-update-p 'query)
 (setq bbdb/mail-auto-create-p t
-      bbdb/news-auto-create-p t)
-(setq bbdb-mua-auto-complete t)
+      bbdb/news-auto-create-p t
+      bbdb-mua-auto-complete t)
 (add-hook 'message-mode-hook
 	  '(lambda ()
 	     (flyspell-mode t)
 	     (local-set-key (kbd "TAB") 'bbdb-complete-mail)))
-(setq bbdb-complete-mail-allow-cycling t)
-
-(setq mm-text-html-renderer 'gnus-w3m)
+(setq bbdb-complete-mail-allow-cycling t
+      mm-text-html-renderer 'gnus-w3m)
 
  ;; Signature
 (setq gnus-posting-styles '((".*" (signature "Geoff Rosenberg"))))
@@ -73,24 +69,23 @@
        (add-to-list 'mm-discouraged-alternatives "text/richtext"))
 
 (require 'epg-config)
-(setq
- epg-debug t
- mml2015-use 'epg
- mml2015-verbose t
- mml-secure-openpgp-encrypt-to-self t
- mml-secure-openpgp-always-trust nil
- mml-secure-cache-passphrase t
- mml-secure-passphrase-cache-expiry '36000
- mml-secure-openpgp-sign-with-sender t
- gnus-message-replyencrypt t
- gnus-message-replysign t
- gnus-message-replysignencrypted t
- gnus-treat-x-pgp-sig t
- mm-verify-option 'always
- mm-decrypt-option 'always
- mm-sign-option 'guided
- gnus-buttonized-mime-types
- '("multipart/alternative" "multipart/encrypted" "multipart/signed"))
+(setq epg-debug t
+       mml2015-use 'epg
+       mml2015-verbose t
+       mml-secure-openpgp-encrypt-to-self t
+       mml-secure-openpgp-always-trust nil
+       mml-secure-cache-passphrase t
+       mml-secure-passphrase-cache-expiry '36000
+       mml-secure-openpgp-sign-with-sender t
+       gnus-message-replyencrypt t
+       gnus-message-replysign t
+       gnus-message-replysignencrypted t
+       gnus-treat-x-pgp-sig t
+       mm-verify-option 'always
+       mm-decrypt-option 'always
+       mm-sign-option 'guided
+       gnus-buttonized-mime-types
+       '("multipart/alternative" "multipart/encrypted" "multipart/signed"))
 
 (defadvice mml2015-sign (after mml2015-sign-rename (cont) act)
   (save-excursion

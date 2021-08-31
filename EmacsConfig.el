@@ -21,6 +21,7 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
+(setq native-comp-async-report-warnings-errors '"silent")
 
 (defun server-shutdown ()
   "Save buffers, quit, and kill server"
@@ -174,8 +175,10 @@ Version 2017-09-01"
         (when (file-exists-p vendor-dir)
           (setenv "GOPATH" (concat vendor-dir path-separator (getenv "GOPATH"))))))
     (add-hook 'projectile-after-switch-project-hook 'set-gopath-smart)
+
     (setq projectile-auto-discover nil
           projectile-completion-system 'ivy
+          projectile-globally-ignored-file-suffixes '("idx")
           projectile-generic-command
           "find . -type f ! -ipath '.git*' ! -ipath '*/.git*' ! -ipath '*/build/*' ! -ipath '*/.cache/*' ! -name '*~' -print0")
     (projectile-mode))
