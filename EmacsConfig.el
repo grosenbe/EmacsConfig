@@ -7,6 +7,7 @@
 (show-paren-mode 1)
 (global-set-key (kbd "C-c b") 'blink-matching-open)
 (display-time-mode 1)
+(setq display-time-format '" %H:%M")
 (global-set-key (kbd "C-c w") 'toggle-truncate-lines)
 (global-set-key (kbd "C-c m c") 'mc/edit-lines)
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
@@ -301,7 +302,9 @@ Version 2017-09-01"
   :config
   (progn
   (doom-modeline-mode)
-  (setq doom-modeline-height 15)))
+  (setq doom-modeline-height 10
+        doom-modeline-buffer-file-name-style 'file-name)))
+
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
