@@ -275,7 +275,8 @@ Version 2017-09-01"
   :config
   (setq lsp-clients-clangd-args '("-j=16" "-background-index" "-cross-file-rename" "-clang-tidy")
         lsp-csharp-server-path '"~/dev/omnisharp-roslyn/artifacts/scripts/OmniSharp.Stdio"
-        lsp-enable-snippet nil)
+        lsp-enable-snippet nil
+        lsp-fortls-args '("-notify-init" "-hover_signature" "-enable_code_actions" "-debug_log"))
   (lsp-register-client
    (make-lsp-client :new-connection (lsp-tramp-connection
 				     '("clangd" "-j=16" "-background-index" "-cross-file-rename"))
