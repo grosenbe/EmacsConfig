@@ -15,7 +15,7 @@
 (global-set-key (kbd "C-c t") 'whitespace-mode)
 (global-set-key (kbd "C-c d") 'display-line-numbers-mode)
 
-(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
 (setq column-number-mode t
       dired-listing-switches "-ahl")
 (menu-bar-mode -1)
@@ -104,10 +104,6 @@ Version 2017-09-01"
    (shell      . t)))
 (setq org-src-fontify-natively t
       org-confirm-babel-evaluate nil)
-
-(global-set-key (kbd "C-x g") 'magit-status)
-(add-hook 'git-commit-setup-hook
-          (lambda () (flyspell-mode 1)))
 
 (add-hook 'c-mode-common-hook
           (lambda () (define-key c-mode-base-map (kbd "C-c C-f") 'recompile)))
@@ -314,6 +310,9 @@ Version 2017-09-01"
   :hook (prog-mode . rainbow-delimiters-mode))
 
 (use-package magit)
+(global-set-key (kbd "C-x g") 'magit-status)
+(add-hook 'git-commit-setup-hook
+          (lambda () (flyspell-mode 1)))
 
 (use-package rust-mode)
 
