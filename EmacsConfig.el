@@ -15,6 +15,16 @@
 (global-set-key (kbd "C-c t") 'whitespace-mode)
 (global-set-key (kbd "C-c d") 'display-line-numbers-mode)
 
+(defconst CGR/using-native-comp (and (fboundp 'native-comp-available-p)
+                                     (native-comp-available-p)))
+(if CGR/using-native-comp
+    (progn
+      (setq native-comp-deferred-compilation t)
+      (setq native-comp-async-query-on-exit t)
+      (setq native-comp-async-jobs-number 4)
+      (setq native-comp-async-report-warnings-errors nil))
+  )
+
 (setq-default indent-tabs-mode nil)
 (setq column-number-mode t
       dired-listing-switches "-ahl")
@@ -131,7 +141,9 @@ Version 2017-09-01"
 
 (use-package dad-joke)
 
-(use-package vterm)
+(use-package vterm
+  :bind
+  (("C-c C-u" . vterm-send-C-u)))
 
 (use-package org-bullets
   :config
@@ -273,7 +285,7 @@ Version 2017-09-01"
   (setq lsp-keymap-prefix "C-c l")
   :hook ((lsp-mode . lsp-enable-which-key-integration))
   :config
-  (setq lsp-clients-clangd-args '("-j=16" "-background-index" "-cross-file-rename" "-clang-tidy")
+  (setq lsp-clients-clangd-args '("-j=16" "-background-index" "-clang-tidy")
         lsp-csharp-server-path '"~/dev/omnisharp-roslyn/artifacts/scripts/OmniSharp.Stdio"
         lsp-enable-snippet nil)
   (lsp-register-client
@@ -304,9 +316,9 @@ Version 2017-09-01"
 (use-package doom-modeline
   :config
   (progn
-  (doom-modeline-mode)
-  (setq doom-modeline-height 10
-        doom-modeline-buffer-file-name-style 'file-name)))
+    (doom-modeline-mode)
+    (setq doom-modeline-height 10
+          doom-modeline-buffer-file-name-style 'file-name)))
 
 
 (use-package rainbow-delimiters
