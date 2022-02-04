@@ -18,13 +18,14 @@
 
 (defconst CGR/using-native-comp (and (fboundp 'native-comp-available-p)
                                      (native-comp-available-p)))
+(defconst CGR/using-native-json (functionp 'json-serialize))
+
 (if CGR/using-native-comp
     (progn
       (setq native-comp-deferred-compilation t)
       (setq native-comp-async-query-on-exit t)
       (setq native-comp-async-jobs-number 4)
-      (setq native-comp-async-report-warnings-errors nil))
-  )
+      (setq native-comp-async-report-warnings-errors nil)))
 
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
@@ -166,15 +167,7 @@ Version 2017-09-01"
           company-require-match nil
           company-transformers '(company-sort-by-occurrence)
           company-idle-delay 0.1
-          company-dabbrev-downcase nil)
-    (global-company-mode)))
-
-(use-package company-ghci
-  :config
-  (progn
-    (push 'company-ghci company-backends)
-    (add-hook 'haskell-mode-hook 'company-mode)
-    (add-hook 'haskell-interactive-mode-hook 'company-mode)))
+          company-dabbrev-downcase nil)))
 
 (use-package projectile
   :config
@@ -218,7 +211,6 @@ Version 2017-09-01"
 (setq company-tooltip-align-annotations t)
 
 (use-package selectrum)
-(use-package orderless)					;required for consult-line
 
 (use-package vertico
   :bind (:map vertico-map
@@ -228,14 +220,14 @@ Version 2017-09-01"
   :init
   (vertico-mode))
 
-(use-package orderless
+(use-package orderless ;required for consult-line
   :init
   (setq completion-styles '(orderless)
         completion-category-defaults nil
         completion-category-overrides '((file (styles partial-completion)))))
 
 (use-package consult
-  :after selectrum
+  :after (selectrum orderless)
   ;; Replace bindings. Lazily loaded due by `use-package'.
   :bind (;; C-c bindings (mode-specific-map)
          ("C-c h" . consult-history)
@@ -374,7 +366,8 @@ Version 2017-09-01"
   :after company
   :config
   ;; (add-to-list 'auto-mode-alist '("\\.cs\\'" . csharp-tree-sitter-mode))
-  (add-hook 'csharp-mode-hook #'company-mode))
+  ;; (add-hook 'csharp-mode-hook #'company-mode)
+  )
 
 (use-package which-key
   :init (which-key-mode)
@@ -385,6 +378,10 @@ Version 2017-09-01"
 (use-package flycheck)
 
 (use-package typescript-mode)
+
+(use-package prettier-js
+  :config
+  (add-hook 'typescript-mode-hook #'prettier-js-mode))
 
 (use-package editorconfig
   :config
@@ -398,11 +395,15 @@ Version 2017-09-01"
   :config
   (setq lsp-clients-clangd-args '("-j=16" "-background-index" "-clang-tidy")
         lsp-csharp-server-path '"~/dev/omnisharp-roslyn/artifacts/scripts/OmniSharp.Stdio"
+        lsp-csharp-server-install-dir '"~/dev/omnisharp-roslyn"
         lsp-enable-snippet nil
-        lsp-fortls-args '("-notify-init" "-hover_signature" "-enable_code_actions" "-debug_log"))
+        lsp-fortls-args '("-notify-init" "-hover_signature" "-enable_code_actions" "-debug_log")
+        gc-cons-threshold 100000000
+        read-process-output-max (* 1024 1024)
+        lsp-completion-provider :capf)
   (lsp-register-client
    (make-lsp-client :new-connection (lsp-tramp-connection
-				     '("clangd" "-j=16" "-background-index" "-cross-file-rename"))
+				     '("clangd" "-j=16" "-background-index" "-clang-tidy"))
                     :major-modes '(c-mode c++-mode)
                     :remote? t
                     :server-id 'clangd-remote)))
@@ -427,7 +428,6 @@ Version 2017-09-01"
     (doom-modeline-mode)
     (setq doom-modeline-height 10
           doom-modeline-buffer-file-name-style 'file-name)))
-
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
