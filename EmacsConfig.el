@@ -180,8 +180,7 @@ Version 2017-09-01"
           "find . -type f ! -ipath '.git*' ! -ipath '*/.git*' ! -ipath '*/build/*' ! -ipath '*/.cache/*' ! -name '*~' -print0")
     (projectile-mode))
   :bind
-  (("C-c p h" . projectile-find-file)
-   ("C-c p o" . projectile-find-other-file-other-window)
+  (("C-c p o" . projectile-find-other-file-other-window)
    ("C-c p s" . projectile-switch-project)
    ("C-c p t" . projectile-find-tag)
    ("C-c p g" . projectile-grep)))
@@ -205,7 +204,12 @@ Version 2017-09-01"
 (setq company-tooltip-align-annotations t)
 
 (use-package selectrum)
-(use-package orderless)					;required for consult-line
+
+(use-package orderless 					;required for consult-line
+  :init
+  (setq completion-styles '(orderless)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion)))))
 
 (use-package vertico
   :bind (:map vertico-map
@@ -214,12 +218,6 @@ Version 2017-09-01"
   (vertico--cycle t)
   :init
   (vertico-mode))
-
-(use-package orderless
-  :init
-  (setq completion-styles '(orderless)
-        completion-category-defaults nil
-        completion-category-overrides '((file (styles partial-completion)))))
 
 (use-package consult
   :after selectrum
@@ -335,7 +333,11 @@ Version 2017-09-01"
   ;; (setq consult-project-root-function #'vc-root-dir)
   ;;;; 4. locate-dominating-file
   ;; (setq consult-project-root-function (lambda () (locate-dominating-file "." ".git")))
-)
+  )
+
+(use-package consult-projectile
+  :bind
+  (("C-c p h" . consult-projectile)))
 
 (use-package savehist
   :init
