@@ -210,9 +210,8 @@ Version 2017-09-01"
 ;; aligns annotation to the right hand side
 (setq company-tooltip-align-annotations t)
 
-(use-package selectrum)
-
 (use-package vertico
+  :after consult
   :bind (:map vertico-map
 			  ("C-s" . consult-line))
   :custom
@@ -227,7 +226,7 @@ Version 2017-09-01"
         completion-category-overrides '((file (styles partial-completion)))))
 
 (use-package consult
-  :after (selectrum orderless)
+  :after orderless
   ;; Replace bindings. Lazily loaded due by `use-package'.
   :bind (;; C-c bindings (mode-specific-map)
          ("C-c h" . consult-history)
