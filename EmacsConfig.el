@@ -180,7 +180,6 @@ Version 2017-09-01"
     (add-hook 'projectile-after-switch-project-hook 'set-gopath-smart)
 
     (setq projectile-auto-discover nil
-          projectile-completion-system 'ivy
           projectile-globally-ignored-file-suffixes '("idx")
           projectile-generic-command
           "find . -type f ! -ipath '.git*' ! -ipath '*/.git*' ! -ipath '*/build/*' ! -ipath '*/.cache/*' ! -name '*~' -print0")
@@ -314,7 +313,7 @@ Version 2017-09-01"
    :preview-key '(:debounce 0.2 any)
    consult-ripgrep consult-git-grep consult-grep
    consult-bookmark consult-recent-file consult-xref
-   consult--source-file consult--source-project-file consult--source-bookmark
+   consult--source-bookmark
    :preview-key (kbd "M-."))
 
   ;; Optionally configure the narrowing key.
