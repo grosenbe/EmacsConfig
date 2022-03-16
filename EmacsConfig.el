@@ -354,7 +354,7 @@ Version 2017-09-01"
         (clang-format-buffer)))
     (add-hook 'before-save-hook 'clang-format-buffer-smart)
     (if (file-directory-p "~/tableau-cache")
-        (setq clang-format-executable "~/tableau-cache/devtools/clang/7.0.4/bin/clang-format"))))
+        (setq clang-format-executable "~/tableau-cache/devtools/clang/9.0.1.c2543473.r48ed89dc/bin/clang-format"))))
 
 (use-package csharp-mode
   :after company
@@ -405,7 +405,10 @@ Version 2017-09-01"
 (use-package lsp-ui
   :after (lsp-mode)
   :config
-  (setq lsp-eldoc-enable-hover nil))
+  (setq lsp-ui-doc-enable t
+        lsp-ui-doc-show-with-cursor t
+        lsp-ui-sideline-show-code-actions t
+        lsp-eldoc-enable-hover nil))
 
 (use-package treemacs)
 
