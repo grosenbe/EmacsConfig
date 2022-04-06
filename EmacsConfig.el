@@ -295,10 +295,6 @@ Version 2017-09-01"
   ;; Optionally replace `completing-read-multiple' with an enhanced version.
   (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
 
-  ;; Use Consult to select xref locations with preview
-  (setq xref-show-xrefs-function #'consult-xref
-        xref-show-definitions-function #'consult-xref)
-
   ;; Configure other variables and modes in the :config section,
   ;; after lazily loading the package.
   :config
@@ -315,7 +311,6 @@ Version 2017-09-01"
    :preview-key '(:debounce 0.2 any)
    consult-ripgrep consult-git-grep consult-grep
    consult-bookmark consult-recent-file consult-xref
-   consult--source-file consult--source-project-file consult--source-bookmark
    :preview-key (kbd "M-."))
 
   ;; Optionally configure the narrowing key.
