@@ -182,7 +182,7 @@ Version 2017-09-01"
     (setq projectile-auto-discover nil
           projectile-globally-ignored-file-suffixes '("idx")
           projectile-generic-command
-          "find . -type f ! -ipath '.git*' ! -ipath '*/.git*' ! -ipath '*/build/*' ! -ipath '*/.cache/*' ! -name '*~' -print0")
+          "find . -type f ! -ipath '.git*' ! -ipath '*/.git*' ! -ipath '*/build/*' ! -ipath '*/.cache/*' ! -name '*~' ! -name '*.js' -print0")
     (projectile-mode))
   :bind
   (("C-c p h" . projectile-find-file)
@@ -387,7 +387,7 @@ Version 2017-09-01"
   (setq lsp-keymap-prefix "C-c l")
   :hook ((lsp-mode . lsp-enable-which-key-integration))
   :config
-  (setq lsp-clients-clangd-args '("-j=16" "-background-index" "-clang-tidy")
+  (setq lsp-clients-clangd-args '("-j=16" "-clang-tidy")
         lsp-csharp-server-path '"~/dev/omnisharp-roslyn/artifacts/scripts/OmniSharp.Stdio"
         lsp-csharp-server-install-dir '"~/dev/omnisharp-roslyn"
         lsp-enable-snippet nil
@@ -397,7 +397,7 @@ Version 2017-09-01"
         lsp-completion-provider :capf)
   (lsp-register-client
    (make-lsp-client :new-connection (lsp-tramp-connection
-				     '("clangd" "-j=16" "-background-index" "-clang-tidy"))
+				     '("clangd" "-j=16" "-clang-tidy"))
                     :major-modes '(c-mode c++-mode)
                     :remote? t
                     :server-id 'clangd-remote)))
@@ -406,7 +406,7 @@ Version 2017-09-01"
   :after (lsp-mode)
   :config
   (setq lsp-ui-doc-enable t
-        lsp-ui-doc-show-with-cursor t
+        lsp-ui-doc-show-with-mouse t
         lsp-ui-sideline-show-code-actions t
         lsp-eldoc-enable-hover nil))
 
@@ -435,6 +435,8 @@ Version 2017-09-01"
           (lambda () (flyspell-mode 1)))
 
 (use-package rust-mode)
+
+(use-package yaml-mode)
 
 (when (file-exists-p "~/.emacs.d/lisp/tableau-data-mode.el")
   (require 'tableau-data-mode)
