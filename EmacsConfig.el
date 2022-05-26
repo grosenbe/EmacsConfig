@@ -18,14 +18,13 @@
 
 (defconst CGR/using-native-comp (and (fboundp 'native-comp-available-p)
                                      (native-comp-available-p)))
-(defconst CGR/using-native-json (functionp 'json-serialize))
 
 (if CGR/using-native-comp
     (progn
-      (setq native-comp-deferred-compilation t)
-      (setq native-comp-async-query-on-exit t)
-      (setq native-comp-async-jobs-number 4)
-      (setq native-comp-async-report-warnings-errors nil)))
+      (setq native-comp-deferred-compilation t
+            native-comp-async-query-on-exit t
+            native-comp-async-jobs-number 4
+            native-comp-async-report-warnings-errors nil)))
 
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
@@ -128,11 +127,8 @@ Version 2017-09-01"
    (when (file-remote-p default-directory)
      (setq dired-actual-switches "-al"))))
 
-(defun colorize-compilation-buffer ()
-  "Colorize the compilation filter buffer from start to point-max."
-  (when (eq major-mode 'compilation-mode)
-    (ansi-color-apply-on-region compilation-filter-start (point-max))))
-(add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+(use-package ansi-color
+  :hook (compilation-filter . ansi-color-compilation-filter))
 
 (use-package multiple-cursors)
 
@@ -140,9 +136,10 @@ Version 2017-09-01"
 
 (use-package dad-joke)
 
-(use-package vterm
-  :bind
-  (("C-c C-u" . vterm-send-C-u)))
+(if module-file-suffix
+    (use-package vterm
+      :bind
+      (("C-c C-u" . vterm-send-C-u))))
 
 (use-package org-bullets
   :config
@@ -169,7 +166,10 @@ Version 2017-09-01"
           company-idle-delay 0.1
           company-dabbrev-downcase nil)))
 
+(use-package rg)
+
 (use-package projectile
+  :after rg
   :config
   (progn
     (defun set-gopath-smart ()
@@ -354,7 +354,7 @@ Version 2017-09-01"
         (clang-format-buffer)))
     (add-hook 'before-save-hook 'clang-format-buffer-smart)
     (if (file-directory-p "~/tableau-cache")
-        (setq clang-format-executable "~/tableau-cache/devtools/clang/9.0.1.c2543473.r48ed89dc/bin/clang-format"))))
+        (setq clang-format-executable "~/tableau-cache/devtools/clang/9.0.1.c2543473.r1cf2d5de/bin/clang-format"))))
 
 (use-package csharp-mode
   :after company
@@ -388,8 +388,8 @@ Version 2017-09-01"
   :hook ((lsp-mode . lsp-enable-which-key-integration))
   :config
   (setq lsp-clients-clangd-args '("-j=16" "-clang-tidy")
-        lsp-csharp-server-path '"~/dev/omnisharp-roslyn/artifacts/scripts/OmniSharp.Stdio"
-        lsp-csharp-server-install-dir '"~/dev/omnisharp-roslyn"
+        lsp-csharp-server-path '"~/dev/omnisharp/artifacts/scripts/OmniSharp.Stdio"
+        lsp-csharp-server-install-dir '"~/dev/omnisharp"
         lsp-enable-snippet nil
         lsp-fortls-args '("-notify-init" "-hover_signature" "-enable_code_actions" "-debug_log")
         gc-cons-threshold 100000000
