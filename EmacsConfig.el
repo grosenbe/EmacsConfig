@@ -102,8 +102,6 @@ Version 2017-09-01"
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-(require 'bind-key)                ;; if you use any :bind variant
-
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
 (setq org-default-notes-file (concat org-directory "/notes.org"))
@@ -129,6 +127,8 @@ Version 2017-09-01"
 
 (use-package ansi-color
   :hook (compilation-filter . ansi-color-compilation-filter))
+
+(use-package all-the-icons)
 
 (use-package multiple-cursors)
 
@@ -337,15 +337,13 @@ Version 2017-09-01"
   )
 
 (use-package consult-projectile
+  :after projectile
   :bind
   (("C-c p h" . consult-projectile)))
 
 (use-package savehist
   :init
   (savehist-mode))
-
-(use-package markdown-mode
-  :mode ("\\.text\\'" "\\.markdown\\'" "\\.md\\'"))
 
 (use-package clang-format
   :config
@@ -363,9 +361,14 @@ Version 2017-09-01"
 (use-package csharp-mode
   :after company
   :config
-  ;; (add-to-list 'auto-mode-alist '("\\.cs\\'" . csharp-tree-sitter-mode))
-  ;; (add-hook 'csharp-mode-hook #'company-mode)
-  )
+  (progn
+    (defun omnisharp-format-buffer-smart ()
+      "Reformat the buffer if we're in LSP mode"
+      (if lsp-mode
+          (lsp-format-buffer)))
+    ;; (add-to-list 'auto-mode-alist '("\\.cs\\'" . csharp-tree-sitter-mode))
+    ;; (add-hook 'csharp-mode-hook #'company-mode)
+    (add-hook 'before-save-hook 'omnisharp-format-buffer-smart)))
 
 (use-package which-key
   :init (which-key-mode)
@@ -381,19 +384,14 @@ Version 2017-09-01"
   :config
   (add-hook 'typescript-mode-hook #'prettier-js-mode))
 
-(use-package editorconfig
-  :config
-  (editorconfig-mode 1))
-
 (use-package lsp-mode
   :after (which-key flycheck)
-  :init
-  (setq lsp-keymap-prefix "C-c l")
-  :hook ((lsp-mode . lsp-enable-which-key-integration))
+  :hook (lsp-mode . (lambda ()
+                      (let ((lsp-keymap-prefix "C-c l"))
+                        (lsp-enable-which-key-integration))))
   :config
+  (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
   (setq lsp-clients-clangd-args '("-j=16" "-clang-tidy")
-        lsp-csharp-server-path '"~/dev/omnisharp/artifacts/scripts/OmniSharp.Stdio"
-        lsp-csharp-server-install-dir '"~/dev/omnisharp"
         lsp-enable-snippet nil
         lsp-fortls-args '("-notify-init" "-hover_signature" "-enable_code_actions" "-debug_log")
         gc-cons-threshold 100000000
@@ -401,7 +399,7 @@ Version 2017-09-01"
         lsp-completion-provider :capf)
   (lsp-register-client
    (make-lsp-client :new-connection (lsp-tramp-connection
-				     '("clangd" "-j=16" "-clang-tidy"))
+				                     '("clangd" "-j=16" "-clang-tidy"))
                     :major-modes '(c-mode c++-mode)
                     :remote? t
                     :server-id 'clangd-remote)))
@@ -416,19 +414,10 @@ Version 2017-09-01"
 
 (use-package treemacs)
 
-(use-package lsp-treemacs)
-
 (use-package cmake-mode)
 
 (use-package treemacs-projectile
   :after treemacs projectile)
-
-(use-package doom-modeline
-  :config
-  (progn
-    (doom-modeline-mode)
-    (setq doom-modeline-height 10
-          doom-modeline-buffer-file-name-style 'file-name)))
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
