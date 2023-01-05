@@ -221,6 +221,7 @@ Version 2017-09-01"
 (add-hook 'p4-form-mode-hook
           (lambda () (flyspell-mode 1)))
 
+;; minibuffer completion
 (use-package vertico
   :bind (:map vertico-map
               ("C-s" . consult-line))
@@ -404,9 +405,8 @@ Version 2017-09-01"
         lsp-enable-snippet nil
         lsp-fortls-args '("-notify-init" "-hover_signature" "-enable_code_actions" "-debug_log")
         gc-cons-threshold 100000000
-        read-process-output-max (* 1024 1024)
         lsp-completion-provider :none
-        lsp-csharp-server-path '"/home/tsi/grosenberg/dev/FOSS/omnisharp-roslyn/artifacts/scripts/OmniSharp.Stdio")
+        read-process-output-max (* 1024 1024))
   (lsp-register-client
    (make-lsp-client :new-connection (lsp-tramp-connection
                                      '("clangd" "-j=16" "-clang-tidy"))
