@@ -130,7 +130,7 @@ Version 2017-09-01"
   :hook (compilation-filter . ansi-color-compilation-filter))
 
 (use-package all-the-icons)
-
+ 
 (use-package multiple-cursors)
 (global-set-key (kbd "C-c m c") 'mc/edit-lines)
 (global-set-key (kbd "C->") 'mc/mark-next-like-this)
