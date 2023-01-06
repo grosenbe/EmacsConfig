@@ -10,7 +10,6 @@
 (display-time-mode 1)
 (setq display-time-format '" %H:%M")
 (global-set-key (kbd "C-c w") 'toggle-truncate-lines)
-(global-set-key (kbd "C-c m c") 'mc/edit-lines)
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 (global-set-key (kbd "C-c C-f") 'recompile)
 (global-set-key (kbd "C-c t") 'whitespace-mode)
@@ -79,7 +78,6 @@ Version 2017-09-01"
 (setq recentf-max-menu-items 25)
 (setq recentf-exclude '("/org/"))
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
-(run-at-time nil (* 5 60) 'recentf-save-list)
 
 (setq-default fill-column 100)
 (setq org-latex-compiler "xelatex")
@@ -104,7 +102,10 @@ Version 2017-09-01"
 
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c c") 'org-capture)
-(setq org-default-notes-file (concat org-directory "/notes.org"))
+
+(if org-directory
+    (setq org-default-notes-file (concat org-directory "/notes.org")))
+
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((C          . t)
@@ -131,6 +132,10 @@ Version 2017-09-01"
 (use-package all-the-icons)
 
 (use-package multiple-cursors)
+(global-set-key (kbd "C-c m c") 'mc/edit-lines)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 
 (use-package htmlize)
 
@@ -153,18 +158,29 @@ Version 2017-09-01"
   :config
   (idle-highlight-mode))
 
-(use-package company
-  :config
-  (progn
-    (setq company-minimum-prefix-length 1
-          company-idle-delay 0.0
-          company-selection-wrap-around t
-          company-show-numbers t
-          company-tooltip-align-annotations t
-          company-require-match nil
-          company-transformers '(company-sort-by-occurrence)
-          company-idle-delay 0.1
-          company-dabbrev-downcase nil)))
+(use-package corfu
+  ;; Optional customizations
+  :custom
+  (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+  (corfu-auto t)                 ;; Enable auto completion
+  (corfu-separator ?\s)          ;; Orderless field separator
+  ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+  ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+  ;; (corfu-preview-current nil)    ;; Disable current candidate preview
+  ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
+  ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+  ;; (corfu-scroll-margin 5)        ;; Use scroll margin
+
+  ;; Enable Corfu only for certain modes.
+  ;; :hook ((prog-mode . corfu-mode)
+  ;;        (shell-mode . corfu-mode)
+  ;;        (eshell-mode . corfu-mode))
+
+  ;; Recommended: Enable Corfu globally.
+  ;; This is recommended since Dabbrev can be used globally (M-/).
+  ;; See also `corfu-excluded-modes'.
+  :init
+  (global-corfu-mode))
 
 (use-package rg)
 
@@ -205,12 +221,9 @@ Version 2017-09-01"
 (add-hook 'p4-form-mode-hook
           (lambda () (flyspell-mode 1)))
 
-;; aligns annotation to the right hand side
-(setq company-tooltip-align-annotations t)
-
 (use-package vertico
   :bind (:map vertico-map
-			  ("C-s" . consult-line))
+              ("C-s" . consult-line))
   :custom
   (vertico--cycle t)
   :init
@@ -218,10 +231,9 @@ Version 2017-09-01"
 
 (use-package orderless ;required for consult-line
   :init
-  (setq completion-styles '(orderless)
+  (setq completion-styles '(orderless basic)
         completion-category-defaults nil
-        completion-category-overrides '((file (styles partial-completion)))))
-
+        completion-category-overrides '((file (styles . (partial-completion))))))
 
 (use-package consult
   :after orderless
@@ -289,9 +301,6 @@ Version 2017-09-01"
   ;; This adds thin lines, sorting and hides the mode line of the window.
   (advice-add #'register-preview :override #'consult-register-window)
 
-  ;; Optionally replace `completing-read-multiple' with an enhanced version.
-  (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
-
   ;; Configure other variables and modes in the :config section,
   ;; after lazily loading the package.
   :config
@@ -358,7 +367,7 @@ Version 2017-09-01"
         (setq clang-format-executable "~/tableau-cache/devtools/clang/9.0.1.c2543473.r1cf2d5de/bin/clang-format"))))
 
 (use-package csharp-mode
-  :after company
+  :after corfu
   :config
   (progn
     (defun omnisharp-format-buffer-smart ()
@@ -366,7 +375,6 @@ Version 2017-09-01"
       (if lsp-mode
           (lsp-format-buffer)))
     ;; (add-to-list 'auto-mode-alist '("\\.cs\\'" . csharp-tree-sitter-mode))
-    ;; (add-hook 'csharp-mode-hook #'company-mode)
     (add-hook 'before-save-hook 'omnisharp-format-buffer-smart)))
 
 (use-package which-key
@@ -377,9 +385,11 @@ Version 2017-09-01"
 
 (use-package flycheck)
 
-(use-package typescript-mode)
+(use-package typescript-mode
+  :mode ("\\.tsx?\\'" . typescript-mode))
 
 (use-package prettier-js
+  :after (typescript-mode)
   :config
   (add-hook 'typescript-mode-hook #'prettier-js-mode))
 
@@ -395,10 +405,11 @@ Version 2017-09-01"
         lsp-fortls-args '("-notify-init" "-hover_signature" "-enable_code_actions" "-debug_log")
         gc-cons-threshold 100000000
         read-process-output-max (* 1024 1024)
-        lsp-completion-provider :capf)
+        lsp-completion-provider :none
+        lsp-csharp-server-path '"/home/tsi/grosenberg/dev/FOSS/omnisharp-roslyn/artifacts/scripts/OmniSharp.Stdio")
   (lsp-register-client
    (make-lsp-client :new-connection (lsp-tramp-connection
-				                     '("clangd" "-j=16" "-clang-tidy"))
+                                     '("clangd" "-j=16" "-clang-tidy"))
                     :major-modes '(c-mode c++-mode)
                     :remote? t
                     :server-id 'clangd-remote)))
@@ -412,6 +423,9 @@ Version 2017-09-01"
         lsp-eldoc-enable-hover nil))
 
 (use-package treemacs)
+
+(use-package lsp-treemacs
+  :after (lsp-mode treemacs))
 
 (use-package cmake-mode)
 
