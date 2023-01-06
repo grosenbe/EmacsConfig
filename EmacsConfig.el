@@ -137,7 +137,7 @@ Version 2017-09-01"
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 
-(use-package htmlize)
+(use-package htmlize) 
 
 (use-package dad-joke)
 
