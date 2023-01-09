@@ -32,7 +32,6 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
-(setq native-comp-async-report-warnings-errors '"silent")
 
 (defun server-shutdown ()
   "Save buffers, quit, and kill server"
@@ -346,7 +345,7 @@ Version 2017-09-01"
   )
 
 (use-package consult-projectile
-  :after projectile
+  :after (projectile consult)
   :bind
   (("C-c p h" . consult-projectile)))
 
@@ -363,9 +362,7 @@ Version 2017-09-01"
                      (eq major-mode 'c-mode))
                  (file-exists-p (expand-file-name ".clang-format" (projectile-project-root))))
         (clang-format-buffer)))
-    (add-hook 'before-save-hook 'clang-format-buffer-smart)
-    (if (file-directory-p "~/tableau-cache")
-        (setq clang-format-executable "~/tableau-cache/devtools/clang/9.0.1.c2543473.r1cf2d5de/bin/clang-format"))))
+    (add-hook 'before-save-hook 'clang-format-buffer-smart)))
 
 (use-package csharp-mode
   :after corfu
