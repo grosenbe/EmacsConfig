@@ -143,7 +143,7 @@ Version 2017-09-01"
 (if module-file-suffix
     (use-package vterm
       :bind
-      (("C-c C-u" . vterm-send-C-u))))
+      (("C-q" . vterm-send-next-key))))
 
 (use-package org-bullets
   :config
@@ -372,7 +372,6 @@ Version 2017-09-01"
       "Reformat the buffer if we're in LSP mode"
       (if lsp-mode
           (lsp-format-buffer)))
-    ;; (add-to-list 'auto-mode-alist '("\\.cs\\'" . csharp-tree-sitter-mode))
     (add-hook 'before-save-hook 'omnisharp-format-buffer-smart)))
 
 (use-package which-key
@@ -440,6 +439,10 @@ Version 2017-09-01"
 (use-package rust-mode)
 
 (use-package yaml-mode)
+
+(use-package marginalia
+  :config
+  (marginalia-mode))
 
 (when (file-exists-p "~/.emacs.d/lisp/tableau-data-mode.el")
   (require 'tableau-data-mode)
