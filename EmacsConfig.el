@@ -203,7 +203,7 @@ Version 2017-09-01"
   (("C-c p o" . projectile-find-other-file-other-window)
    ("C-c p s" . projectile-switch-project)
    ("C-c p t" . projectile-find-tag)
-   ("C-c p g" . projectile-grep)))
+   ("C-c p g" . projectile-ripgrep)))
 
 (use-package p4)
 (defun p4-tramp-workaround-find-file-hook ()
