@@ -5,7 +5,6 @@
 (setq lexical-binding 1)
 (global-set-key (kbd "<C-tab>") 'other-window)
 (delete-selection-mode 1)
-(show-paren-mode 1)
 (global-set-key (kbd "C-c b") 'blink-matching-open)
 (display-time-mode 1)
 (setq display-time-format '" %H:%M")
@@ -22,7 +21,6 @@
     (progn
       (setq native-comp-deferred-compilation t
             native-comp-async-query-on-exit t
-            native-comp-async-jobs-number 4
             native-comp-async-report-warnings-errors nil)))
 
 (setq-default indent-tabs-mode nil)
@@ -84,6 +82,31 @@ Version 2017-09-01"
 (setq tex-start-commands "")
 (setq sentence-end-double-space nil)
 
+(global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-c c") 'org-capture)
+
+(if org-directory
+    (setq org-default-notes-file (concat org-directory "/notes.org")))
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((C          . t)
+   (emacs-lisp . t)
+   (dot        . t)
+   (ditaa      . t)
+   (shell      . t)))
+(setq org-confirm-babel-evaluate nil)
+
+(add-hook 'c-mode-common-hook
+          (lambda () (define-key c-mode-base-map (kbd "C-c C-f") 'recompile)))
+(setq compilation-scroll-output t)
+
+(add-hook
+ 'dired-before-readin-hook
+ (lambda ()
+   (when (file-remote-p default-directory)
+     (setq dired-actual-switches "-al"))))
+
 (require 'package)
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("org" . "https://orgmode.org/elpa/")
@@ -99,42 +122,17 @@ Version 2017-09-01"
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-(global-set-key (kbd "C-c a") 'org-agenda)
-(global-set-key (kbd "C-c c") 'org-capture)
-
-(if org-directory
-    (setq org-default-notes-file (concat org-directory "/notes.org")))
-
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((C          . t)
-   (emacs-lisp . t)
-   (dot        . t)
-   (ditaa      . t)
-   (shell      . t)))
-(setq org-src-fontify-natively t
-      org-confirm-babel-evaluate nil)
-
-(add-hook 'c-mode-common-hook
-          (lambda () (define-key c-mode-base-map (kbd "C-c C-f") 'recompile)))
-(setq compilation-scroll-output t)
-
-(add-hook
- 'dired-before-readin-hook
- (lambda ()
-   (when (file-remote-p default-directory)
-     (setq dired-actual-switches "-al"))))
-
 (use-package ansi-color
   :hook (compilation-filter . ansi-color-compilation-filter))
 
 (use-package all-the-icons)
 
-(use-package multiple-cursors)
-(global-set-key (kbd "C-c m c") 'mc/edit-lines)
-(global-set-key (kbd "C->") 'mc/mark-next-like-this)
-(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+(use-package multiple-cursors
+  :bind
+  (("C-c m c" . mc/edit-lines)
+   ("C->" . mc/mark-next-like-this)
+   ("C-<" . mc/mark-previous-like-this)
+   ("C-c C-<" . mc/mark-all-like-this)))
 
 (use-package htmlize) 
 
@@ -220,20 +218,28 @@ Version 2017-09-01"
 (add-hook 'p4-form-mode-hook
           (lambda () (flyspell-mode 1)))
 
-;; minibuffer completion
+(use-package orderless ;required for consult-line
+  :init
+  (message '"loaded orderless")
+  (setq completion-styles '(orderless basic)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles . (partial-completion))))))
+
+(use-package consult-projectile
+  :after projectile
+  :init
+  (message '"loaded consult-projectile")
+  (global-set-key (kbd "C-c p h") 'consult-projectile))
+
 (use-package vertico
+  :after orderless
   :bind (:map vertico-map
               ("C-s" . consult-line))
   :custom
   (vertico--cycle t)
   :init
+  (message '"loaded vertico")
   (vertico-mode))
-
-(use-package orderless ;required for consult-line
-  :init
-  (setq completion-styles '(orderless basic)
-        completion-category-defaults nil
-        completion-category-overrides '((file (styles . (partial-completion))))))
 
 (use-package consult
   :after orderless
@@ -244,7 +250,7 @@ Version 2017-09-01"
          ("C-c k" . consult-kmacro)
          ;; C-x bindings (ctl-x-map)
          ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
-         ("C-x b"   . consult-buffer)                ;; orig. switch-to-buffer
+         ;; ("C-x b"   . consult-buffer)                ;; orig. switch-to-buffer
          ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
          ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
          ;; Custom M-# bindings for fast register access
@@ -344,11 +350,6 @@ Version 2017-09-01"
   ;; (setq consult-project-root-function (lambda () (locate-dominating-file "." ".git")))
   )
 
-(use-package consult-projectile
-  :after (projectile consult)
-  :bind
-  (("C-c p h" . consult-projectile)))
-
 (use-package savehist
   :init
   (savehist-mode))
@@ -364,16 +365,6 @@ Version 2017-09-01"
         (clang-format-buffer)))
     (add-hook 'before-save-hook 'clang-format-buffer-smart)))
 
-(use-package csharp-mode
-  :after corfu
-  :config
-  (progn
-    (defun omnisharp-format-buffer-smart ()
-      "Reformat the buffer if we're in LSP mode"
-      (if lsp-mode
-          (lsp-format-buffer)))
-    (add-hook 'before-save-hook 'omnisharp-format-buffer-smart)))
-
 (use-package which-key
   :init (which-key-mode)
   :diminish which-key-mode
@@ -382,11 +373,29 @@ Version 2017-09-01"
 
 (use-package flycheck)
 
-(use-package typescript-mode
-  :mode ("\\.tsx?\\'" . typescript-mode))
+(defun lsp-format-buffer-smart ()
+  "Reformat the buffer if we're in LSP mode"
+  (if prettier-js-mode (message "in prettier js mode, skipping lsp format buffer") (if lsp-mode (message "lsp formatting buffer")))
+  (if (and lsp-mode (not prettier-js-mode))
+      (lsp-format-buffer)))
 
+(use-package csharp-mode
+  :after (corfu prettier-js lsp-mode)
+  :config
+  (add-hook 'before-save-hook 'lsp-format-buffer-smart))
+
+(use-package editorconfig)
+
+(use-package typescript-mode
+  :mode ("\\.tsx?\\'" . typescript-mode)
+  :after (corfu editorconfig prettier-js lsp-mode)
+  ;; :hook ((typescript-mode . 'editorconfig-apply)
+  ;;        (before-save . 'lsp-format-buffer-smart))
+  )
+
+;; todo: only want to be in prettier-js-mode if we're in a project that has a .prettierrc at the LSP project root
 (use-package prettier-js
-  :after (typescript-mode)
+  :after typescript-mode
   :config
   (add-hook 'typescript-mode-hook #'prettier-js-mode))
 
@@ -415,26 +424,27 @@ Version 2017-09-01"
   :config
   (setq lsp-ui-doc-enable t
         lsp-ui-doc-show-with-mouse t
-        lsp-ui-sideline-show-code-actions t
+        lsp-ui-sideline-show-code-actions nil
         lsp-eldoc-enable-hover nil))
 
-(use-package treemacs)
+;; (use-package treemacs)
 
-(use-package lsp-treemacs
-  :after (lsp-mode treemacs))
+;; (use-package lsp-treemacs
+;;   :after (lsp-mode treemacs))
+
+;; (use-package treemacs-projectile
+;;   :after treemacs projectile)
 
 (use-package cmake-mode)
-
-(use-package treemacs-projectile
-  :after treemacs projectile)
 
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
-(use-package magit)
-(global-set-key (kbd "C-x g") 'magit-status)
-(add-hook 'git-commit-setup-hook
-          (lambda () (flyspell-mode 1)))
+(use-package magit
+  :config
+  (global-set-key (kbd "C-x g") 'magit-status)
+  (add-hook 'git-commit-setup-hook
+            (lambda () (flyspell-mode 1))))
 
 (use-package rust-mode)
 
