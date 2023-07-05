@@ -77,25 +77,9 @@ Version 2017-09-01"
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
 (setq-default fill-column 100)
-(setq org-latex-compiler "xelatex")
 (setq latex-run-command "latexmk")
 (setq tex-start-commands "")
 (setq sentence-end-double-space nil)
-
-(global-set-key (kbd "C-c a") 'org-agenda)
-(global-set-key (kbd "C-c c") 'org-capture)
-
-(if org-directory
-    (setq org-default-notes-file (concat org-directory "/notes.org")))
-
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((C          . t)
-   (emacs-lisp . t)
-   (dot        . t)
-   (ditaa      . t)
-   (shell      . t)))
-(setq org-confirm-babel-evaluate nil)
 
 (add-hook 'c-mode-common-hook
           (lambda () (define-key c-mode-base-map (kbd "C-c C-f") 'recompile)))
@@ -121,6 +105,23 @@ Version 2017-09-01"
 
 (require 'use-package)
 (setq use-package-always-ensure t)
+
+(use-package org
+  :config
+  (setq org-default-notes-file "~/org/notes.org"
+        org-latex-compiler "xelatex"
+        org-confirm-babel-evaluate nil
+        org-agenda-files `("~/org")
+        org-directory "~/org")
+  (global-set-key (kbd "C-c a") 'org-agenda)
+  (global-set-key (kbd "C-c c") 'org-capture)
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((C          . t)
+     (emacs-lisp . t)
+     (dot        . t)
+     (ditaa      . t)
+     (shell      . t))))
 
 (use-package ansi-color
   :hook (compilation-filter . ansi-color-compilation-filter))
@@ -223,10 +224,11 @@ Version 2017-09-01"
   (message '"loaded orderless")
   (setq completion-styles '(orderless basic)
         completion-category-defaults nil
+        read-buffer-completion-ignore-case t
+        read-file-name-completion-ignore-case t
         completion-category-overrides '((file (styles . (partial-completion))))))
 
 (use-package consult-projectile
-  :after projectile
   :init
   (message '"loaded consult-projectile")
   (global-set-key (kbd "C-c p h") 'consult-projectile))
@@ -406,18 +408,13 @@ Version 2017-09-01"
                         (lsp-enable-which-key-integration))))
   :config
   (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
-  (setq lsp-clients-clangd-args '("-j=16" "-clang-tidy")
+  (setq lsp-clients-clangd-args '("-clang-tidy" "-log=verbose" "-background-index")
         lsp-enable-snippet nil
         lsp-fortls-args '("-notify-init" "-hover_signature" "-enable_code_actions" "-debug_log")
         gc-cons-threshold 100000000
         lsp-completion-provider :none
-        read-process-output-max (* 1024 1024))
-  (lsp-register-client
-   (make-lsp-client :new-connection (lsp-tramp-connection
-                                     '("clangd" "-j=16" "-clang-tidy"))
-                    :major-modes '(c-mode c++-mode)
-                    :remote? t
-                    :server-id 'clangd-remote)))
+        read-process-output-max (* 1024 1024)
+        lsp-use-plists 1))
 
 (use-package lsp-ui
   :after (lsp-mode)
@@ -427,13 +424,15 @@ Version 2017-09-01"
         lsp-ui-sideline-show-code-actions nil
         lsp-eldoc-enable-hover nil))
 
-;; (use-package treemacs)
+;; hacky workaround to get treemacs working
+(add-to-list 'image-types 'svg)
+(use-package treemacs)
 
-;; (use-package lsp-treemacs
-;;   :after (lsp-mode treemacs))
+(use-package lsp-treemacs
+  :after (lsp-mode treemacs))
 
-;; (use-package treemacs-projectile
-;;   :after treemacs projectile)
+(use-package treemacs-projectile
+  :after treemacs projectile)
 
 (use-package cmake-mode)
 
@@ -453,6 +452,8 @@ Version 2017-09-01"
 (use-package marginalia
   :config
   (marginalia-mode))
+
+(use-package bazel)
 
 (when (file-exists-p "~/.emacs.d/lisp/tableau-data-mode.el")
   (require 'tableau-data-mode)
