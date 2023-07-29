@@ -424,8 +424,6 @@ Version 2017-09-01"
         lsp-ui-sideline-show-code-actions nil
         lsp-eldoc-enable-hover nil))
 
-;; hacky workaround to get treemacs working
-(add-to-list 'image-types 'svg)
 (use-package treemacs)
 
 (use-package lsp-treemacs
