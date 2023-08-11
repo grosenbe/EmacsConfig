@@ -396,7 +396,6 @@ Version 2017-09-01"
 
 (use-package which-key
   :init (which-key-mode)
-  :diminish which-key-mode
   :config
   (setq which-key-idle-delay 1))
 
@@ -477,6 +476,8 @@ Version 2017-09-01"
 (use-package marginalia
   :config
   (marginalia-mode))
+
+(use-package fireplace)
 
 (use-package bazel)
 
